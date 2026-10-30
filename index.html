@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Plan Saciante · Test de 2 minutos</title>
+  <meta name="description" content="Haz el test de 2 minutos y recibe tu plan de 21 días para deshinchar, calmar los antojos de la noche y recuperar tu energía.">
+  <meta name="theme-color" content="#1C2541">
+  <meta property="og:title" content="Plan Saciante · Test de 2 minutos">
+  <meta property="og:description" content="El licuado de la noche para deshinchar y dejar los antojos. Descubre tu plan de 21 días.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M7 4h18l-2.5 24h-13z' fill='%23F2B544'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=1">
+</head>
+<body>
+  <a class="skip" href="#main">Saltar al contenido</a>
+  <header class="top" id="top" hidden>
+    <button class="back" id="back" type="button" aria-label="Volver a la pregunta anterior">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <div class="brand" aria-hidden="true">Plan&nbsp;Saciante</div>
+    <div class="glass" role="progressbar" aria-label="Progreso del test" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress">
+      <svg viewBox="0 0 40 52" aria-hidden="true">
+        <defs><clipPath id="cup"><path d="M5 4h30l-4 44H9z"/></clipPath></defs>
+        <g clip-path="url(#cup)">
+          <rect x="0" y="0" width="40" height="52" fill="#EFE6D8"/>
+          <rect id="milk" x="0" y="52" width="40" height="52" fill="#F2B544"/>
+        </g>
+        <path d="M5 4h30l-4 44H9z" fill="none" stroke="#1C2541" stroke-width="2.5" stroke-linejoin="round"/>
+      </svg>
+      <span id="pct">0%</span>
+    </div>
+  </header>
+  <main id="main" tabindex="-1"></main>
+  <noscript><p style="padding:24px">Activa JavaScript para hacer el test.</p></noscript>
+  <script src="config.js?v=1"></script>
+  <script src="app.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+.post{max-width:520px;margin:0 auto;padding:24px 20px 60px}
+.post .step{display:flex;gap:8px;align-items:center;font-weight:700;color:var(--texto-2);font-size:14px;margin-bottom:14px}
+.post .step i{flex:1;height:6px;border-radius:999px;background:var(--avena);overflow:hidden;position:relative}
+.post .step i::after{content:"";position:absolute;inset:0;width:var(--w,50%);background:var(--agave);border-radius:999px}
+.post h1{font-size:clamp(28px,7.6vw,36px)}
+.post ul.list{list-style:none;padding:0;margin:16px 0;display:grid;gap:10px}
+.post ul.list li{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--avena);border-radius:16px;padding:12px 14px}
+.post ul.list svg{flex:none;width:22px;height:22px;fill:none;stroke:var(--agave);stroke-width:2.6;margin-top:2px}
+.post .no{display:block;text-align:center;margin-top:10px;color:var(--texto-2);font-weight:600;min-height:48px;line-height:48px}
+.dl{display:grid;gap:10px;margin:16px 0}
+.dl a{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--avena);border-radius:16px;padding:14px;text-decoration:none;color:var(--noche);font-weight:700;min-height:60px}
+.dl a span{margin-left:auto;color:var(--agave);font-size:14px}

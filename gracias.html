@@ -1,0 +1,16 @@
+<!doctype html><html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="robots" content="noindex"><meta name="theme-color" content="#1C2541"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css?v=1"><link rel="stylesheet" href="page.css?v=1"><title>¡Listo! Tu Plan Saciante · Descargas</title></head><body>
+<main class="post">
+<div class="step">Paso 3 de 3 <i style="--w:100%"></i></div>
+<span class="badge ok">Compra confirmada</span>
+<h1 style="margin-top:12px">¡Bienvenida al Plan Saciante!</h1>
+<p class="sub">Aquí tienes tu plan y tus bonos. Guarda esta página en favoritos: también te llegó el acceso por correo.</p>
+<div class="dl" id="dl"></div>
+<div class="card"><b>Empieza esta noche</b><p style="margin:6px 0 0;color:var(--texto-2)">Abre el Plan Saciante 21 en la página 6, prepara tu primer licuado y marca el día 1 en tu registro.</p></div>
+<p class="disclaimer">Este material es educativo y no sustituye la consulta médica. Si estás embarazada, lactando, tienes diabetes, tomas medicamentos o tienes alguna condición de salud, consulta a tu médico antes de cambiar tu alimentación. ¿Dudas o quieres usar tu garantía de 30 días? Responde al correo de tu compra.</p>
+</main>
+<script>
+(function(){var base="descargas/",f=[["plan-saciante-21.pdf","Plan Saciante 21"],["bono-30-postres-sin-culpa.pdf","Bono · 30 Postres Sin Culpa"],["bono-20-licuados-y-aguas-frescas.pdf","Bono · 20 Licuados y Aguas Frescas"],["bono-guia-antojos-bajo-control.pdf","Bono · Guía Antojos Bajo Control"]];
+var extra={b1:["bump-menu-express-15-min.pdf","Menú Express 15 min"],b2:["bump-protocolo-panza-plana-7-dias.pdf","Protocolo Panza Plana 7 días"],b3:["bump-ritual-sueno-profundo.pdf","Ritual de Sueño Profundo"],u:["upsell-plan-saciante-90.pdf","Plan Saciante 90"],d:["downsell-plan-saciante-90-menus.pdf","Plan Saciante 90 · Menús"]};
+var q=new URLSearchParams(location.search);(q.get("x")||"").split(",").forEach(function(k){if(extra[k])f.push(extra[k]);});
+document.getElementById("dl").innerHTML=f.map(function(x){return '<a href="'+base+x[0]+'" download>'+x[1]+'<span>Descargar PDF</span></a>';}).join("");})();
+</script></body></html>
