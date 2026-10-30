@@ -3,11 +3,14 @@ window.SACIANTE_CONFIG = {
   // Meta Pixel: vacío = no se carga ningún píxel (los eventos solo se registran en consola).
   META_PIXEL_ID: "",
 
-  // Checkout principal (USD 9). Si KashPay está listo, poner aquí su URL (pay.sheridanmktmng.com/...).
-  // Respaldo: plan oculto de Whop (Sheridan) creado el 31-oct.
-  CHECKOUT_URL: "https://whop.com/checkout/plan_kGCkazBxpnOUv",
+  // Checkout principal (USD 9) en KashPay, con los 3 order bumps y el embudo upsell → downsell.
+  CHECKOUT_URL: "https://pay.sheridanmktmng.com/checkout/checkout-1793403586919",
+  // Respaldo sin bumps (Whop directo): https://whop.com/checkout/plan_kGCkazBxpnOUv
 
-  // Upsell y downsell (los usan upsell.html y downsell.html si KashPay no los aloja).
+  // Upsell y downsell one-click de KashPay (tokens del embudo "Funnel Plan Saciante 21").
+  KP_UPSELL: "https://pay.sheridanmktmng.com/u/c56586b6945a3101",
+  KP_DOWNSELL: "https://pay.sheridanmktmng.com/u/2a9d24d988082957",
+  // Respaldo Whop (cobro aparte, pide la tarjeta otra vez):
   UPSELL_URL: "https://whop.com/checkout/plan_6HqdieE1PDaZd",   // Plan Saciante 90 · USD 27
   DOWNSELL_URL: "https://whop.com/checkout/plan_O8cTfalg3IxBR", // Plan Saciante 90 solo menús · USD 13
 

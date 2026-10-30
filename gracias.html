@@ -11,6 +11,8 @@
 <script>
 (function(){var base="descargas/",f=[["plan-saciante-21.pdf","Plan Saciante 21"],["bono-30-postres-sin-culpa.pdf","Bono · 30 Postres Sin Culpa"],["bono-20-licuados-y-aguas-frescas.pdf","Bono · 20 Licuados y Aguas Frescas"],["bono-guia-antojos-bajo-control.pdf","Bono · Guía Antojos Bajo Control"]];
 var extra={b1:["bump-menu-express-15-min.pdf","Menú Express 15 min"],b2:["bump-protocolo-panza-plana-7-dias.pdf","Protocolo Panza Plana 7 días"],b3:["bump-ritual-sueno-profundo.pdf","Ritual de Sueño Profundo"],u:["upsell-plan-saciante-90.pdf","Plan Saciante 90"],d:["downsell-plan-saciante-90-menus.pdf","Plan Saciante 90 · Menús"]};
-var q=new URLSearchParams(location.search);(q.get("x")||"").split(",").forEach(function(k){if(extra[k])f.push(extra[k]);});
-document.getElementById("dl").innerHTML=f.map(function(x){return '<a href="'+base+x[0]+'" download>'+x[1]+'<span>Descargar PDF</span></a>';}).join("");})();
+var q=new URLSearchParams(location.search);var ks=(q.get("x")||"").split(",").filter(function(k){return extra[k];});ks.forEach(function(k){f.push(extra[k]);});
+var rest=Object.keys(extra).filter(function(k){return ks.indexOf(k)<0;}).map(function(k){return extra[k];});
+function L(x){return '<a href="'+base+x[0]+'" download>'+x[1]+'<span>Descargar PDF</span></a>';}
+document.getElementById("dl").innerHTML=f.map(L).join("")+(rest.length?'<h2 style="font-size:20px;margin:18px 0 0">Extras de tu compra</h2><p class="sub" style="margin:4px 0 0;font-size:15px">Descarga aquí los complementos que agregaste en el pago.</p>'+rest.map(L).join(""):"");})();
 </script></body></html>
