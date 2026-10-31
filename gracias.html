@@ -1,10 +1,10 @@
-<!doctype html><html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="robots" content="noindex"><meta name="theme-color" content="#1C2541"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css?v=3"><link rel="stylesheet" href="page.css?v=3"><title>¡Listo! Entra a tu app · Plan Saciante</title></head><body>
+<!doctype html><html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="robots" content="noindex"><meta name="theme-color" content="#1C2541"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css?v=3"><link rel="stylesheet" href="page.css?v=3"><title>¡Listo! Entra a tu app · El Vaso Blanco</title></head><body>
 <main class="post">
 <div class="step">Paso 3 de 3 <i style="--w:100%"></i></div>
 <span class="badge ok">Compra confirmada</span>
-<h1 style="margin-top:12px" id="hi">¡Tu Plan Saciante personalizado está listo!</h1>
-<p class="sub">Tu plan vive en una <b>app en tu celular</b>: tu menú de cada día, tu check-in, tus recetas, tu lista del súper y tu progreso.</p>
-<figure class="appmock"><img src="app-mockup.png" width="1080" height="1080" alt="La app del Plan Saciante en un celular"></figure>
+<h1 style="margin-top:12px" id="hi">¡Tu plan del Vaso Blanco personalizado está listo!</h1>
+<p class="sub">Tu plan vive en una <b>app en tu celular</b>: tu medida del Vaso Blanco, tu menú de cada día, tus recetas, tu lista del súper y tu medidor sin báscula.</p>
+<figure class="appmock"><img src="app-mockup.png?v=2" width="1080" height="1080" alt="La app de El Vaso Blanco en un celular, con el vaso blanco al lado"></figure>
 <a class="cta" id="go" href="#">Entrar a mi app</a>
 <div class="card" style="margin-top:16px"><b>Cómo entrar</b>
 <ol style="margin:8px 0 0;padding-left:20px;color:var(--texto-2);line-height:1.55">
@@ -12,10 +12,10 @@
 <li>Escribe el <b>mismo correo con el que pagaste</b>. No hace falta contraseña.</li>
 <li>Instálala: en iPhone, <b>Compartir → Agregar a pantalla de inicio</b>; en Android, <b>Instalar app</b>.</li>
 </ol></div>
-<div class="card" style="margin-top:12px"><b>Empieza esta noche</b><p style="margin:6px 0 0;color:var(--texto-2)">Abre la pestaña <b>Hoy</b>, prepara tu primer licuado y marca tu día 1. Los extras que agregaste en el pago ya están dentro de la app.</p></div>
-<p class="disclaimer">Este material es educativo y no sustituye la consulta médica. Si estás embarazada, lactando, tienes diabetes, tomas medicamentos o tienes alguna condición de salud, consulta a tu médico antes de cambiar tu alimentación. ¿Dudas o quieres usar tu garantía de 30 días? Responde al correo de tu compra.</p>
+<div class="card" style="margin-top:12px"><b>Empieza mañana temprano</b><p style="margin:6px 0 0;color:var(--texto-2)">Abre la pestaña <b>Hoy</b>, mira tu medida, prepara tu primer Vaso Blanco y marca tu día 1. Los extras que agregaste en el pago ya están dentro de la app.</p></div>
+<p class="disclaimer">Este material es educativo y no sustituye la consulta médica. Si estás embarazada, lactando, tienes diabetes, tomas medicamentos o tienes alguna condición de salud, consulta a tu médico antes de cambiar tu alimentación. ¿Dudas o quieres usar la apuesta (30 días para pedir tu reembolso)? Responde al correo de tu compra.</p>
 </main>
-<script src="config.js?v=3"></script><script src="attrib.js?v=1" data-page="gracias"></script>
+<script src="config.js?v=4"></script><script src="attrib.js?v=1" data-page="gracias"></script>
 <script>
 (function(){
   var C=window.SACIANTE_CONFIG||{}, base=(C.APP_URL||"https://app-production-e884.up.railway.app").replace(/\/$/,"");
@@ -24,8 +24,8 @@
   var hash="#/bienvenida";
   if(S&&S.a){
     var nm=(S.a.name||"").trim();
-    if(nm) document.getElementById("hi").textContent=nm.split(" ")[0]+", tu Plan Saciante personalizado está listo";
-    var p={name:nm,age:S.a.age||"",unit:S.unit||"kg",w:S.w,g:S.g,h:S.h};
+    if(nm) document.getElementById("hi").textContent=nm.split(" ")[0]+", tu plan del Vaso Blanco personalizado está listo";
+    var p={name:nm,age:S.a.age||"",unit:S.unit||"kg",w:S.w,g:S.g,h:S.h,cr:S.a.cravings||"",nt:(S.a.blockers||[]).indexOf("noche")>-1?1:0};
     try{hash+="?p="+encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(p)))));}catch(e){}
   }
   var q=new URLSearchParams(location.search), em=q.get("email")||q.get("customer_email")||"";

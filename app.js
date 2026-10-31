@@ -1,9 +1,9 @@
-/* Plan Saciante · quiz funnel (estático, sin dependencias) */
+/* El Vaso Blanco · quiz funnel (estático, sin dependencias). Oferta V2: OFERTA-V2.md */
 (function () {
   "use strict";
   var C = window.SACIANTE_CONFIG || {};
   // Marca centralizada en config.js (BRAND / PRODUCT).
-  var BR = C.BRAND || "Plan Saciante", PR = C.PRODUCT || BR + " 21";
+  var BR = C.BRAND || "El Vaso Blanco", PR = C.PRODUCT || BR + " · Plan de 21 días";
   var $main = document.getElementById("main");
   var $top = document.getElementById("top");
   var $back = document.getElementById("back");
@@ -135,9 +135,9 @@
     { type: "info", render: function () {
       var colors = ["#9C4A1A", "#1E7A4C", "#2B3763", "#C98A12"];
       return '<h2>No estás sola</h2>' +
-        '<p class="sub">Sentirse hinchada en la tarde, tener antojos de noche y ver que la báscula no se mueve aunque comas poco es de lo más común después de los 35.</p>' +
+        '<p class="sub">Sentirse hinchada en la tarde, andar picando todo el día y ver que la báscula no se mueve aunque comas poco es de lo más común después de los 35.</p>' +
         '<div class="card center"><span class="faces" aria-hidden="true" style="justify-content:center">' + ["L", "M", "C", "R"].map(function (x, k) { return '<i style="background:' + colors[k] + '">' + x + "</i>"; }).join("") + "</span>" +
-        '<p style="margin:12px 0 0;font-size:18px;font-weight:600">La buena noticia: casi siempre tiene que ver con lo que pasa <span style="color:var(--canela)">en la tarde y en la noche</span>, y eso se puede cambiar.</p></div>';
+        '<p style="margin:12px 0 0;font-size:18px;font-weight:600">La buena noticia: no es tu culpa, y casi siempre empieza <span style="color:var(--canela)">en la mañana</span>. Eso se puede cambiar con un vaso.</p></div>';
     }, cta: "Continuar" },
     { id: "zones", type: "multi", title: "¿Dónde notas más el cambio?", sub: "Elige todas las que quieras.", options: [
       { v: "panza", t: "Panza", i: "belly" }, { v: "cintura", t: "Cintura y costados", i: "waist" },
@@ -146,13 +146,11 @@
     { type: "info", render: function () {
       var z = (S.a.zones || ["panza"]).map(function (v) { return label("zones", v).toLowerCase(); });
       var first = z[0] || "panza";
-      return '<h2>No eres tú. Es tu etapa.</h2>' +
-        '<p class="sub">Después de los 35, el cuerpo duerme peor, guarda más líquido y pide más azúcar por la noche. Por eso muchas mujeres lo notan primero en la <b>' + esc(first) + "</b>, aunque no coman de más.</p>" +
-        '<div class="card"><ol class="steps">' +
-        "<li><b>Cenas con poca proteína y fibra</b><span>A las dos horas ya tienes hambre otra vez.</span></li>" +
-        "<li><b>Antojo de la noche</b><span>Pan dulce, galletas, «algo» antes de dormir.</span></li>" +
-        "<li><b>Duermes peor y amaneces hinchada</b><span>Y al día siguiente el hambre es mayor.</span></li>" +
-        "</ol></div>";
+      // OFERTA-V2 4.4 (2): el mecanismo "despensa con candado" (la llave del original, sin decir "regula la insulina").
+      return '<h2>No es tu culpa. Es cómo funciona el cuerpo después de los 35.</h2>' +
+        '<div class="card center" style="margin-bottom:14px">' + PANTRY + '</div>' +
+        '<p class="sub">Imagina una <b>despensa con candado</b>: guarda fácil y suelta difícil. Cada vez que picas algo (el pancito, la galleta, el jugo), el cuerpo vuelve a cerrar con llave.</p>' +
+        '<p class="sub">Si picas todo el día, la despensa nunca se abre. Por eso comes poco y no bajas, y lo notas primero en la <b>' + esc(first) + "</b>.</p>";
     }, cta: "Tiene sentido, continuar" },
     { id: "name", type: "name", title: "¿Cómo te llamas?", sub: "Para preparar tu plan con tu nombre." },
     { id: "bother", type: "single", title: function () { return N() + ", ¿qué es lo que más te pesa hoy?"; }, options: [
@@ -174,7 +172,7 @@
       return '<div class="center" style="margin-top:12px"><span class="badge ok">' + ico("leaf").replace("<svg", '<svg style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2"') + " Buena noticia</span></div>" +
         '<h2 class="center" style="margin-top:14px">' + N() + ", no te falta fuerza de voluntad.</h2>" +
         '<p class="sub center">' + line + "</p>" +
-        '<div class="card center"><p style="margin:0;font-size:19px;font-weight:600">El ' + BR + ' no te quita comida.<br>Te da <span style="color:var(--canela)">un licuado para la noche</span> que llena y calma el antojo.</p></div>';
+        '<div class="card center"><p style="margin:0;font-size:19px;font-weight:600">' + BR + ' no te quita comida.<br>Te da <span style="color:var(--canela)">un vaso en la mañana</span> que te llena hasta la comida, para que dejes de picar sin pelearte con el hambre.</p></div>';
     }, cta: "Quiero saber más" },
     { id: "blockers", type: "multi", title: "¿Qué te frena hoy?", sub: "Elige todas las que apliquen.", options: [
       { v: "hambre", t: "Me da hambre y termino cediendo", i: "hunger" },
@@ -184,15 +182,15 @@
       { v: "constancia", t: "Empiezo con ganas y lo dejo", i: "repeat" } ] },
     { type: "info", render: function () {
       return "<h2>Lo que gastan muchas mujeres vs. lo que vas a gastar tú</h2>" +
-        '<div class="compare"><div class="a"><b>Lo de siempre</b>Malteadas de marca, suplementos, comida «light», gimnasio que no usas: fácil más de $100 al mes.</div>' +
-        '<div class="b"><b>' + BR + '</b>Avena, chía, canela, yogur y fruta del súper. Menos de <b style="display:inline;font-size:inherit">$1</b> por licuado.</div></div>' +
-        '<p class="sub" style="margin-top:16px">Sin polvos raros. Sin pastillas. Solo tu licuadora.</p>';
+        '<div class="compare"><div class="a"><b>Lo de siempre</b>Malteadas, tés, pastillas y gimnasio que no usas: fácil más de $100 al mes.</div>' +
+        '<div class="b"><b>Tu ' + BR + '</b>Leche, avena y chía, más una pizca de canela: <b style="display:inline;font-size:inherit">unos 10 pesos</b> por vaso.</div></div>' +
+        '<p class="sub" style="margin-top:16px">Sin polvos raros. Sin pastillas. 3 cosas del súper y 1 minuto en la licuadora.</p>';
     }, cta: "Continuar" },
     { id: "goals", type: "multi", title: "¿Qué quieres lograr en 21 días?", sub: "Elige todas las que quieras.", options: [
       { v: "deshinchar", t: "Deshinchar la panza", i: "belly" },
       { v: "antojos", t: "Dejar los antojos de la noche", i: "cookie" },
       { v: "energia", t: "Tener más energía", i: "bolt" },
-      { v: "ropa", t: "Que la ropa me quede mejor", i: "waist" },
+      { v: "ropa", t: "Volver a ponerme la ropa que tengo guardada", i: "waist" },
       { v: "dormir", t: "Dormir mejor", i: "bed" } ] },
     { id: "bloat", type: "single", title: "¿Con qué frecuencia te sientes hinchada o con la panza dura?", options: [
       { v: "diario", t: "Casi todos los días", i: "belly" },
@@ -205,15 +203,17 @@
       { v: "madrugada", t: "Me despierto con hambre", i: "bed" },
       { v: "todo", t: "Todo el día", i: "clock" } ] },
     { type: "info", render: function () {
-      return "<h2>Así funciona el licuado de la noche</h2>" +
-        '<p class="sub">Una receta de 5 ingredientes que tomas como cena ligera o 1 hora antes de dormir.</p>' +
+      // OFERTA-V2 4.4 (3).
+      return "<h2>Por qué funciona " + BR + "</h2>" +
+        '<div class="center" style="margin:4px 0 10px">' + CUP(64) + "</div>" +
         '<div class="card"><ol class="steps">' +
-        "<li><b>Proteína + fibra</b><span>Yogur, avena y chía llenan y se digieren despacio.</span></li>" +
-        "<li><b>Sin pico de azúcar</b><span>La canela y la fruta entera endulzan sin dispararte el antojo.</span></li>" +
-        "<li><b>Llegas a la cama satisfecha</b><span>Sin asaltar la alacena a las 11 de la noche.</span></li>" +
-        '<li class="good"><b>Amaneces más ligera</b><span>Menos hinchazón y más energía, día tras día.</span></li>' +
-        "</ol></div>";
-    }, cta: "Entendido, sigamos" },
+        "<li><b>Te llena hasta la comida</b><span>La avena y la chía se inflan y te dejan satisfecha 4 o 5 horas.</span></li>" +
+        "<li><b>Dejas de picar sin pelearte con el hambre</b><span>Ni el pancito ni la galleta de media mañana.</span></li>" +
+        "<li><b>El candado descansa</b><span>Y el cuerpo tiene tiempo de soltar.</span></li>" +
+        '<li class="good"><b>Panza más ligera y la ropa más cómoda</b><span>Semana tras semana.</span></li>' +
+        "</ol></div>" +
+        '<p class="sub" style="margin-top:14px"><i>La receta es la misma para todas. <b>La medida no</b>: por eso te hacemos unas preguntas más.</i></p>';
+    }, cta: "Quiero saber mi medida" },
     { id: "weight", type: "weight", title: "¿Cuánto pesas hoy?", sub: "Un aproximado está bien." },
     { id: "height", type: "height", title: "¿Cuánto mides?" },
     { id: "goal", type: "goal", title: "¿Cuál es tu peso ideal?", sub: "El que te haría sentir cómoda." },
@@ -234,9 +234,9 @@
       { v: "5-7", t: "5 a 7 vasos", i: "drop" },
       { v: "8+", t: "8 vasos o más", i: "check" } ] },
     { type: "projection" },
-    { id: "commit", type: "single", title: function () { return N() + ", ¿te comprometes a tomar tu licuado 21 noches?"; }, sub: "Son 5 minutos al día. Es lo único que te vamos a pedir.", options: [
+    { id: "commit", type: "single", title: function () { return N() + ", ¿te comprometes a tomar tu " + BR + " 21 mañanas?"; }, sub: "Es 1 minuto en la licuadora. Es lo único que te vamos a pedir.", options: [
       { v: "si", t: "Sí, me comprometo", i: "heart" },
-      { v: "hoy", t: "Sí, y quiero empezar hoy", i: "sparkle" },
+      { v: "hoy", t: "Sí, y empiezo mañana mismo", i: "sparkle" },
       { v: "dudas", t: "Tengo algunas dudas", i: "question" } ], onDone: function () { track("Lead", { content_name: "quiz_completo" }, true); } },
     { type: "loading", kind: "analysis" },
     { type: "result" },
@@ -304,14 +304,15 @@
     var opts = s.options.map(function (o) {
       return '<button type="button" class="opt tile" data-v="' + o.v + '" aria-pressed="' + (S.a.age === o.v) + '"><span class="ic">' + ico(o.i) + '</span><span class="tx">' + esc(o.t) + "</span></button>";
     }).join("");
+    // OFERTA-V2 4.4 (1): la portada repite el anuncio ("¿qué tiene ese vaso blanco?") y la palabra que justifica el test: tu medida.
     return '<section class="hero">' +
-      '<span class="kicker">' + ico("moon").replace("<svg", '<svg style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2"') + " Test gratuito de 2 minutos</span>" +
-      "<h1>Responde y recibe tu plan personalizado para <em>deshinchar la panza</em> y dejar los antojos de la noche</h1>" +
-      '<p class="sub" style="margin:0">Un licuado de 5 ingredientes del súper y un plan de 21 días según tu cuerpo, tu rutina y tus horarios.</p>' +
+      '<span class="kicker">' + ico("glass").replace("<svg", '<svg style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2"') + " Test gratis · 2 minutos</span>" +
+      "<h1>Contesta y recibe la receta del <em>Vaso Blanco</em> con <em>tu medida</em> para deshinchar la panza</h1>" +
+      '<p class="sub" style="margin:0">3 cosas del súper, 1 minuto en la licuadora, en la mañana. La receta es la misma; <b>la medida cambia según tu cuerpo</b>.</p>' +
       '<h2 style="font-size:20px;margin:6px 0 0">Selecciona tu edad para empezar</h2>' +
       '<div class="opts grid2" role="group" aria-label="Tu edad">' + opts + "</div>" +
-      '<div class="proof"><span class="faces" aria-hidden="true"><i style="background:#9C4A1A">L</i><i style="background:#1E7A4C">M</i><i style="background:#2B3763">R</i><i style="background:#C98A12">C</i></span><span>Mujeres de México y EE. UU. ya lo están haciendo</span></div>' +
-      '<div class="trust"><span>' + ico("check") + "Gratis</span><span>" + ico("check") + "Sin registrarte</span><span>" + ico("check") + "Resultado al instante</span></div>" +
+      '<div class="proof"><span class="faces" aria-hidden="true"><i style="background:#9C4A1A">L</i><i style="background:#1E7A4C">M</i><i style="background:#2B3763">R</i><i style="background:#C98A12">C</i></span><span>Mujeres de México y EE. UU. ya tienen su medida</span></div>' +
+      '<div class="trust"><span>' + ico("check") + "Gratis</span><span>" + ico("check") + "Sin registrarte</span><span>" + ico("check") + "Tu medida al instante</span></div>" +
       "</section>";
   }
 
@@ -361,20 +362,20 @@
   function projection() {
     var diff = Math.max(0, S.w - S.g);
     return "<h2>" + N() + ", tu meta es alcanzable.</h2>" +
-      '<p class="sub">' + (diff > 0 ? "Quieres bajar " + diff + " " + S.unit + ". " : "") + "Lo que hace que una mujer llegue a su meta no es aguantar hambre, sino notar cambios pronto para no rendirse. Así se ven tus 21 días:</p>" +
-      '<div class="card chart"><svg viewBox="0 0 320 170" role="img" aria-label="Gráfica: los antojos bajan y la energía sube del día 1 al día 21">' +
+      '<p class="sub">' + (diff > 0 ? "Quieres bajar " + diff + " " + S.unit + ". " : "") + "Lo que hace que una mujer no se rinda es <b>notar la ropa más floja pronto</b>, no aguantar hambre. Así se ven tus 21 días:</p>" +
+      '<div class="card chart"><svg viewBox="0 0 320 170" role="img" aria-label="Gráfica: la hinchazón baja y la comodidad de la ropa sube del día 1 al día 21">' +
       '<g stroke="#EFE6D8" stroke-width="1"><path d="M30 20H310M30 60H310M30 100H310M30 140H310"/></g>' +
       '<path d="M30 30 C90 40 120 90 170 110 S260 135 310 140" fill="none" stroke="#9C4A1A" stroke-width="4" stroke-linecap="round"/>' +
       '<path d="M30 130 C90 125 130 90 180 70 S270 35 310 28" fill="none" stroke="#1E7A4C" stroke-width="4" stroke-linecap="round"/>' +
       '<circle cx="310" cy="28" r="6" fill="#1E7A4C"/><circle cx="310" cy="140" r="6" fill="#9C4A1A"/>' +
       '<g font-family="Figtree" font-size="12" fill="#4A4F63"><text x="30" y="162">Día 1</text><text x="120" y="162">Día 7</text><text x="205" y="162">Día 14</text><text x="282" y="162">Día 21</text></g></svg>' +
-      '<div class="legend"><span><i style="background:#9C4A1A"></i>Antojos</span><span><i style="background:#1E7A4C"></i>Energía</span></div></div>' +
+      '<div class="legend"><span><i style="background:#9C4A1A"></i>Panza hinchada</span><span><i style="background:#1E7A4C"></i>La ropa te queda</span></div></div>' +
       '<p class="note">Ilustración del recorrido típico del plan. Cada cuerpo responde distinto.</p>' + dock("Ver mi plan");
   }
 
   // Testimonios: en config.js (REVIEWS con foto IA y VIDEOS). Franco L 4.2 ≈47:03: nombre + ciudad + estrellas.
   var REVIEWS = (C.REVIEWS && C.REVIEWS.length ? C.REVIEWS : [
-    { name: "Lupita", age: 47, city: "Guadalajara", text: "Ya no me levanto a buscar pan a las 11. El licuado de canela me deja tranquila." }
+    { name: "Lupita", age: 47, city: "Guadalajara", text: "Mi vaso blanco de la mañana me deja tranquila hasta la comida." }
   ]);
   var STARS = '<span class="stars" aria-label="5 de 5 estrellas">★★★★★</span>';
   var NOTE = function () { return C.SHOW_TESTIMONIAL_NOTE ? '<p class="fine">Testimonios ilustrativos. Los resultados varían de persona a persona.</p>' : ""; };
@@ -400,12 +401,13 @@
   }
   function loading(s) {
     var plan = s.kind === "plan";
-    var items = plan ? ["Eligiendo tus 6 licuados", "Armando tu menú de 21 días", "Ajustando la lista del súper", "Agregando tus bonos"]
-      : ["Calculando tu índice de masa corporal", "Revisando tus horarios de antojo", "Analizando sueño e hidratación", "Detectando tus señales principales"];
+    // OFERTA-V2 4.4 (5): la carga final dice "tu medida" y "tu hora".
+    var items = plan ? ["Calculando tu medida de avena y chía", "Eligiendo tu hora del vaso", "Armando tus 21 días con comida de diario", "Haciendo tu lista del súper"]
+      : ["Calculando tu peso para tu estatura", "Revisando a qué hora te pega el hambre", "Analizando sueño e hidratación", "Detectando tus señales principales"];
     return '<div class="loader" aria-live="polite">' +
-      '<svg class="bigcup" viewBox="0 0 40 52" aria-hidden="true"><defs><clipPath id="bc"><path d="M5 4h30l-4 44H9z"/></clipPath></defs><g clip-path="url(#bc)"><rect width="40" height="52" fill="#2B3763"/><rect id="bigmilk" y="52" width="40" height="52" fill="#F2B544"/></g><path d="M5 4h30l-4 44H9z" fill="none" stroke="#F5F1EA" stroke-width="2" stroke-linejoin="round"/></svg>' +
+      '<svg class="bigcup" viewBox="0 0 40 52" aria-hidden="true"><defs>' + CHIA_PATTERN + '<clipPath id="bc"><path d="M5 4h30l-4 44H9z"/></clipPath></defs><g clip-path="url(#bc)"><rect width="40" height="52" fill="#2B3763"/><rect id="bigmilk" y="52" width="40" height="52" fill="url(#chia)"/></g><path d="M5 4h30l-4 44H9z" fill="none" stroke="#F5F1EA" stroke-width="2" stroke-linejoin="round"/></svg>' +
       "<h2>" + (plan ? "Estamos creando tu plan personalizado, " + N() + "…" : "Analizando tus respuestas, " + N() + "…") + "</h2>" +
-      '<p class="sub" id="lp" style="margin:0;font:800 28px var(--display);color:#F2B544">0%</p>' +
+      '<p class="sub" id="lp" style="margin:0;font:800 28px var(--display);color:#FFFFFF">0%</p>' +
       '<ul class="checks">' + items.map(function (x) { return '<li><span class="dot"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg></span>' + x + "</li>"; }).join("") + "</ul>" +
       '<div class="ticker" id="tk"></div></div>';
   }
@@ -413,12 +415,12 @@
   function bmi() { var m = (S.h || 160) / 100; return kg(S.w) / (m * m); }
   function signals() {
     var a = S.a, out = [];
-    if (a.bloat === "diario" || a.bloat === "tarde") out.push(["Hinchazón frecuente", "Tu digestión se pone lenta en la tarde y la noche. La fase Deshinchar empieza justo aquí."]);
-    if (a.cravings === "cena" || a.cravings === "madrugada" || (a.blockers || []).indexOf("noche") > -1) out.push(["Antojos nocturnos", "Tu última comida no te deja satisfecha. El licuado de la noche cubre ese hueco."]);
-    if (a.sleep === "<5" || a.sleep === "5-7") out.push(["Sueño corto", "Dormir menos de 7 horas aumenta el hambre del día siguiente. Tu plan incluye una rutina para la noche."]);
+    if (a.bloat === "diario" || a.bloat === "tarde") out.push(["Hinchazón frecuente", "La panza se te infla conforme avanza el día. La fase Deshinchar empieza justo aquí."]);
+    if (a.cravings === "cena" || a.cravings === "madrugada" || (a.blockers || []).indexOf("noche") > -1) out.push(["Antojos nocturnos", "Llegas a la noche con hambre. Por eso tu plan te suma un vaso chico en la noche."]);
+    if (a.sleep === "<5" || a.sleep === "5-7") out.push(["Sueño corto", "Dormir menos de 7 horas aumenta el hambre del día siguiente. Con tu vaso de la mañana llegas llena a la comida aunque hayas dormido poco."]);
     if (a.water === "poca" || a.water === "2-4") out.push(["Poca hidratación", "Con poca agua el cuerpo retiene más líquido. Tus aguas frescas sin azúcar ayudan."]);
     if (a.tried === "rebote" || a.tried === "nada") out.push(["Efecto rebote", "Las dietas de hambre hacen que el cuerpo se defienda. Aquí no vas a contar calorías."]);
-    if (out.length < 2) out.push(["Cenas bajas en proteína y fibra", "Es el patrón más común en mujeres de tu edad, y el más fácil de corregir."]);
+    if (out.length < 2) out.push(["Picoteo durante el día", "Un desayuno que no llena hace que piques hasta la comida. Es lo más común en mujeres de tu edad, y lo más fácil de corregir."]);
     return out.slice(0, 4);
   }
   function profile() {
@@ -428,7 +430,7 @@
     if (night) return "Antojo nocturno";
     if (bloat) return "Hinchazón de tarde y noche";
     if (a.tried === "rebote" || a.tried === "nada") return "Rebote por dietas de hambre";
-    return "Cena poco saciante";
+    return "Desayuno que no llena";
   }
   function result() {
     var b = bmi(), bv = b.toFixed(1);
@@ -440,73 +442,80 @@
       // Franco (L 4.1): "según todas tus respuestas, tu perfil es tanto", con la meta y el plazo de la persona.
       '<div class="card" style="margin-bottom:12px"><p style="margin:0">Según tus respuestas, tu perfil es <b>' + esc(profile()) + "</b>.</p>" +
       (S.w > S.g ? '<p style="margin:8px 0 0">Tu meta: <b>' + S.g + " " + S.unit + "</b> (" + (S.w - S.g) + " " + S.unit + " menos)" + (S.a.sizegoal && S.a.sizegoal !== "nose" ? ", volver a la talla <b>" + esc(label("sizegoal", S.a.sizegoal)) + "</b>" : "") + ". Tu plan: <b>21 días</b> para arrancar.</p>" : "") + "</div>" +
-      '<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><b>Tu IMC</b><span style="font:800 30px var(--display)">' + bv + ' <small style="font:600 15px var(--body);color:var(--texto-2)">' + cat + "</small></span></div>" +
+      '<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><b>Tu peso para tu estatura (IMC)</b><span style="font:800 30px var(--display)">' + bv + ' <small style="font:600 15px var(--body);color:var(--texto-2)">' + cat + "</small></span></div>" +
       '<div class="imc"><div class="imc-bar"><span class="imc-pin" style="left:' + pin + '%"></span></div><div class="imc-scale"><span>Bajo</span><span>Normal</span><span>Sobrepeso</span><span>Obesidad</span></div></div>' +
       '<ul class="signals">' + sig.map(function (x) { return "<li>" + ico("alert") + "<div><b>" + x[0] + "</b><span>" + x[1] + "</span></div></li>"; }).join("") + "</ul></div>" +
-      '<p class="sub" style="margin-top:18px">La buena noticia: todas tienen que ver con <b>hábitos de la tarde y la noche</b>, y es justo lo que el ' + BR + ' trabaja.</p>' +
+      '<p class="sub" style="margin-top:18px">La buena noticia: todas tienen que ver con <b>lo que desayunas y cuánto picas</b>, y es justo lo que arregla ' + BR + '.</p>' + medidaCard() +
       '<p class="note">El IMC es solo una referencia. Este test no es un diagnóstico médico.</p>' + dock("Ver cómo lo logran otras mujeres");
   }
   function testimonials() {
     return "<h2>Lo que cuentan quienes ya empezaron</h2>" + carousel() + NOTE() + dock("Quiero mi plan");
   }
 
+  // Página de venta: copy de OFERTA-V2 4.1, en el orden de Franco (L 4.2).
   function offer() {
     track("ViewContent", { content_name: PR, value: C.PRICE, currency: C.CURRENCY }, true);
-    var goals = (S.a.goals || ["deshinchar", "antojos"]).map(function (v) { return label("goals", v).toLowerCase(); });
-    var g = goals.slice(0, 2).join(" y ");
-    var price = C.PRICE, anchor = C.ANCHOR;
+    var price = C.PRICE, anchor = C.ANCHOR, mxn = C.PRICE_MXN_NOTE ? C.PRICE_MXN_NOTE + " · " : "";
     var cta = '<a class="cta" data-checkout href="' + esc(C.CHECKOUT_URL || "#") + '">Recibir mi plan · $' + price + " USD</a>";
+    var under = '<div class="secure">' + ico("lock") + " Compra segura · Entras a tu app en 1 minuto · Pago único</div>";
     return '<div class="offer">' +
-      '<div class="banner" role="timer">Esta oferta termina en: <b id="tm">' + C.TIMER_MINUTES + ":00</b></div>" +
-      "<h2>" + N() + ", tu " + PR + " personalizado está listo</h2>" +
-      appMock() + todayVsAfter() +
-      '<p class="sub">Hecho con tus respuestas para ayudarte a <b>' + esc(g) + "</b>, con recetas de tu súper y un licuado para cada noche. Todo dentro de <b>una app en tu celular</b>.</p>" +
-      cta +
+      '<div class="banner" role="timer">Tu medida queda guardada · Esta oferta termina en <b id="tm">' + C.TIMER_MINUTES + ":00</b></div>" +
+      "<h2>" + N() + ", tu plan del " + esc(BR.replace(/^El /, "")) + " personalizado está listo</h2>" +
+      appMock() +
+      '<p class="sub center" style="margin-top:-4px">Tu medida, tu hora y tus 21 días, en una app en tu celular.</p>' +
+      todayVsAfter() +
+      '<div class="card medida-line" style="margin:14px 0">' + medidaLine() + "</div>" +
+      cta + under +
       "<section><h2>Tus 21 días, paso a paso</h2><div class=\"phases\">" +
-      '<div class="phase"><div class="d">Días<b>1-7</b></div><div><b>Deshinchar</b><p>Licuado de la noche + aguas frescas. Notas la panza más ligera.</p></div></div>' +
-      '<div class="phase"><div class="d">Días<b>8-14</b></div><div><b>Ajustar</b><p>Menú con más proteína y fibra. Los antojos bajan.</p></div></div>' +
-      '<div class="phase"><div class="d">Días<b>15-21</b></div><div><b>Sostener</b><p>Ya es tu hábito. Postres sin culpa incluidos.</p></div></div></div></section>' +
-      "<section><h2>Todo lo que recibes hoy</h2><ul class=\"stack\">" +
-      stackItem("", "App " + PR, "Tu menú de cada día, check-in de hábitos, licuado + 6 variantes y gráfica de progreso", 47) +
-      stackItem("", "Lista del súper automática", "Se arma sola cada semana con tu menú. La compartes por WhatsApp en un toque", 20) +
-      stackItem("b", "Bono 1 · 30 Postres Sin Culpa", "Dentro de la app, con filtros por tiempo y por lo que no comes", 27) +
-      stackItem("b", "Bono 2 · 20 Licuados y Aguas Frescas", "Jamaica, pepino-limón, avena-canela… para no aburrirte", 19) +
-      stackItem("b", "Bono 3 · Guía Antojos Bajo Control", "Plan de 7 días para la ansiedad de la noche, día por día en la app", 17) +
-      stackItem("", "Recordatorios y acceso de por vida", "Alarmas para tu licuado y tu check-in. Entras desde cualquier celular con tu correo", 17) +
+      '<div class="phase"><div class="d">Días<b>1-7</b></div><div><b>Deshinchar</b><p>Tu Vaso Blanco cada mañana + aguas frescas. Notas la panza más ligera.</p></div></div>' +
+      '<div class="phase"><div class="d">Días<b>8-14</b></div><div><b>Ajustar</b><p>Desayuno, comida y cena de diario. Dejas de picar.</p></div></div>' +
+      '<div class="phase"><div class="d">Días<b>15-21</b></div><div><b>Sostener</b><p>Ya es tu hábito, y la ropa se siente más cómoda.</p></div></div></div></section>' +
+      "<section><h2>Esto es lo que recibes hoy</h2><ul class=\"stack\">" +
+      stackItem("", "Tu receta del Vaso Blanco con TU medida", "Calculada con tus respuestas, y con 6 sabores para no aburrirte", 47) +
+      stackItem("", "Tu plan de 21 días, día por día", "Desayuno, comida y cena con comida de diario: frijolitos, tortillas, nada raro", 37) +
+      stackItem("", "El recetario «sin lo que no como»", "Escondes lo que no te cae bien y la app te enseña solo lo que sí", 19) +
+      stackItem("", "La lista del súper que se hace sola", "Walmart, Soriana o H-E-B. La mandas por WhatsApp con un toque", 17) +
+      stackItem("", "Tu medidor sin báscula", "Marcas panza, antojos y energía, y ves cómo cambian. Con recordatorios", 14) +
+      stackItem("b", "Bono 1 · 30 Postres Sin Culpa", "Para cuando te gane el antojo de dulce", 27) +
+      stackItem("b", "Bono 2 · Antojos Bajo Control", "7 días para las noches difíciles", 17) +
+      stackItem("b", "Bono 3 · 20 Aguas Frescas sin azúcar", "Para dejar el refresco sin sufrir", 19) +
       "</ul>" +
-      '<div class="price"><div class="today">Oferta válida solo por hoy</div><div class="was">Valor total <s>$' + anchor + " USD</s></div>" +
+      '<div class="price"><div class="today">Oferta válida solo por hoy</div><div class="was">Todo por separado: <s>$' + anchor + " USD</s></div>" +
       '<div class="now">$' + price + "<small>USD</small></div>" +
-      '<p class="why">Precio de lanzamiento. Después sube a $' + C.PRICE_AFTER + " USD y los bonos se retiran.</p>" +
-      cta.replace('class="cta"', 'class="cta"') +
-      '<div class="secure">' + ico("lock") + " Compra segura · Acceso inmediato a tu app · Satisfacción garantizada</div></div></section>" +
-      offerReviews() + '<section class="card guarantee"><div class="seal"><span><b>30</b>días</span></div><div><b>Garantía de 30 días</b><p style="margin:4px 0 0;color:var(--texto-2);font-size:15.5px">Si en 30 días no sientes la diferencia, te devolvemos cada centavo. Escribes un correo y listo, sin preguntas.</p></div></section>' +
+      '<p class="why" style="margin-top:2px"><i>(' + mxn + "pago único, no es suscripción)</i></p>" +
+      '<p class="why">Precio de lanzamiento. Después sube a $' + C.PRICE_AFTER + " USD y los 3 bonos se retiran.</p>" +
+      cta + under + "</div></section>" +
+      offerReviews() +
+      '<section class="card guarantee"><div class="seal"><span><b>La</b>apuesta</span></div><div><b>Te propongo una apuesta</b><p style="margin:4px 0 0;color:var(--texto-2);font-size:15.5px">Haz tu Vaso Blanco 7 mañanas. Si no notas la panza más desinflamada, me escribes un correo y te regreso tus ' + price + " dólares. Sin preguntas. <b>Y te quedas con la app.</b> <i>(Tienes 30 días para pedirlo.)</i></p></div></section>" +
       "<section><h2>Preguntas frecuentes</h2>" +
-      faq("¿Necesito ingredientes caros?", "No. Avena, chía, canela, yogur natural, leche o bebida vegetal y fruta. Todo lo encuentras en Walmart, Soriana, H-E-B o cualquier súper.") +
-      faq("¿Voy a pasar hambre?", "No. El plan está hecho para que comas tres veces al día y llegues satisfecha a la noche. No se cuentan calorías.") +
-      faq("¿Cómo lo recibo?", "Justo después de pagar entras a la app con el mismo correo de tu compra. Se instala en tu celular como cualquier app (iPhone y Android), sin descargar nada de la tienda.") +
-      faq("¿Sirve si tengo más de 50?", "Sí. Está pensado para mujeres de 35 a 60 años. Si tomas medicamentos o tienes alguna condición, consúltalo antes con tu médico.") +
-      faq("¿Es un medicamento o un suplemento?", "No. Es un plan de alimentación con recetas caseras. No vendemos pastillas ni polvos.") +
-      faq("¿Y si no me funciona?", "Tienes 30 días de garantía. Si no te gusta, te devolvemos tu dinero.") +
+      faq("¿Es una pastilla o un polvo?", "No. Es una receta casera con 3 cosas del súper y un plan de comidas. No vendemos nada para tomar.") +
+      faq("¿Cuánto cuesta el vaso?", "Unos 10 pesos (medio dólar). Menos que un café.") +
+      faq("¿Voy a pasar hambre?", "No. Comes 3 veces al día y el vaso te llena hasta la comida.") +
+      faq("¿Cómo lo recibo?", "Pagas y en 1 minuto entras a la app con tu correo. Funciona en cualquier celular, sin descargar nada de la tienda.") +
+      faq("¿Se cobra cada mes?", "No. Es un solo pago de " + price + " dólares.") +
+      faq("¿Sirve si tengo más de 50?", "Sí, está pensado para mujeres de 35 a 60. Si tomas medicamentos o tienes diabetes, pregúntale antes a tu doctor.") +
       "</section>" +
-      '<section style="margin-top:24px">' + cta + "</section>" +
+      '<section style="margin-top:24px">' + cta + under + "</section>" +
       '<p class="disclaimer">Este material es educativo y no sustituye la consulta médica. Si estás embarazada, lactando, tienes diabetes, tomas medicamentos o tienes alguna condición de salud, consulta a tu médico antes de cambiar tu alimentación o tu actividad física. Los resultados varían de persona a persona. Este sitio no forma parte de Facebook ni de Meta Platforms, Inc.</p>' +
       "</div>";
   }
-  // Mockup de la app (Franco: "hay que mostrar que vamos a entregar una aplicación", L 2.5; mockup del celular, L 4.4).
+  // Mockup de la app (Franco: "hay que mostrar que vamos a entregar una aplicación", L 2.5). V2: el celular con el vaso blanco al lado.
   function appMock() {
-    return '<figure class="appmock"><img src="app-mockup.png" width="1080" height="1080" alt="La app del ' + BR + ' en un celular: tu día, tu menú y tu check-in" loading="eager"><figcaption>Tu plan vive en una app en tu celular</figcaption></figure>';
+    return '<figure class="appmock"><img src="app-mockup.png?v=2" width="1080" height="1080" alt="La app de ' + esc(BR) + ' en un celular, con el vaso blanco al lado" loading="eager"></figure>';
   }
-  // Franco L 4.2: bloque "Hoy / En 21 días" con barras en rojo y en verde (dos columnas al 50 %) + elemento de alerta.
+  // Franco L 4.2: bloque "Hoy / En 21 días" con barras en rojo y en verde (dos columnas al 50 %) + elemento de alerta. Filas de OFERTA-V2 4.1.
   function todayVsAfter() {
-    var rows = [["Hinchazón", 78, 25], ["Antojos de noche", 82, 20], ["Energía", 30, 80]];
+    var rows = [["Panza hinchada", 80, 22, false], ["Antojos", 82, 22, false], ["La ropa te queda", 30, 82, true], ["Energía", 30, 80, true]];
     function col(title, idx, cls) {
       return '<div class="tv-col ' + cls + '"><b>' + title + "</b>" + rows.map(function (r) {
-        var v = r[idx], good = r[0] === "Energía" ? v >= 50 : v < 50;
+        var v = r[idx], good = r[3] ? v >= 50 : v < 50;
         return '<div class="tv-row"><span>' + r[0] + '</span><div class="tv-track"><i style="width:' + v + "%;background:" + (good ? "#1E7A4C" : "#B3261E") + '"></i></div></div>';
       }).join("") + "</div>";
     }
+    var e = endInfo();
     return '<section class="tv"><div class="tv-grid">' + col("Hoy", 1, "now") + col("En 21 días", 2, "after") + "</div>" +
-      '<div class="alertbox" role="note">' + ico("alert") + "<div><b>Atención, " + N() + "</b><span>Si sigues igual, la hinchazón y los antojos de la noche suelen ir a más con los años. Empezar hoy es lo más fácil.</span></div></div></section>";
+      '<p class="note">Así lo describen la mayoría de las mujeres al terminar las 3 fases. Cada cuerpo responde distinto.</p>' +
+      '<div class="alertbox" role="note">' + ico("alert") + "<div><b>" + N() + ", ojo:</b><span>si no cambias nada, la panza hinchada y los antojos suelen ir a más con los años. Si empiezas hoy, terminas tus 21 días el <b>" + esc(e.date) + "</b>" + (e.when ? ", " + e.when : "") + ".</span></div></div></section>";
   }
   // Franco 2.2 punto 7 (L 4.2 ≈67:35, L 4.4): testimonios en imagen + 2 vídeos, después del precio y antes de la garantía.
   function offerReviews() {
@@ -516,6 +525,50 @@
     return '<li><span class="mock ' + cls + '" aria-hidden="true"></span><span class="t"><b>' + t + "</b><span>" + d + '</span></span><span class="v" aria-label="Valor ' + v + ' dólares">$' + v + "</span></li>";
   }
   function faq(q, a) { return "<details><summary>" + q + "</summary><p>" + a + "</p></details>"; }
+
+
+  /* ---------- V2: el vaso blanco con puntitos, tu medida, tu hora y la fecha de fin ---------- */
+  // Patrón de "puntitos negros" (la chía) para el vaso de la barra de progreso y de la carga: la firma visual del anuncio.
+  var CHIA_PATTERN = '<pattern id="chia" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#FFFFFF"/><circle cx="2.5" cy="3" r="1.05" fill="#1B2238"/><circle cx="7" cy="7.2" r=".9" fill="#1B2238"/></pattern>';
+  function CUP(px) {
+    return '<svg viewBox="0 0 40 52" width="' + px + '" height="' + Math.round(px * 1.3) + '" aria-hidden="true"><defs>' + CHIA_PATTERN.replace('id="chia"', 'id="chia2"') + '</defs>' +
+      '<path d="M5 4h30l-4 44H9z" fill="url(#chia2)" stroke="#1C2541" stroke-width="2" stroke-linejoin="round"/></svg>';
+  }
+  // La despensa con candado (mecanismo V2), dibujada.
+  var PANTRY = '<svg viewBox="0 0 120 92" width="150" height="115" role="img" aria-label="Una despensa con candado">' +
+    '<rect x="14" y="10" width="92" height="76" rx="6" fill="#EFE6D8" stroke="#1C2541" stroke-width="3"/><path d="M60 10v76" stroke="#1C2541" stroke-width="3"/>' +
+    '<path d="M22 34h30M68 34h30M22 58h30M68 58h30" stroke="#C9B9A3" stroke-width="3"/>' +
+    '<rect x="49" y="46" width="22" height="18" rx="3" fill="#9C4A1A"/><path d="M53 46v-6a7 7 0 0 1 14 0v6" fill="none" stroke="#9C4A1A" stroke-width="3.5"/><circle cx="60" cy="55" r="2.6" fill="#FFF"/></svg>';
+  // Tu medida (OFERTA-V2 3.1): mismas 3 cosas para todas; las cucharadas de avena y chía cambian según peso, estatura y meta.
+  function medida() {
+    var w = kg(S.w), bm = bmi(), gl = Math.max(0, kg(S.w) - kg(S.g)), lv;
+    lv = w < 66 && bm < 26 ? 0 : w < 86 && bm < 32 ? 1 : 2;
+    if (gl >= 15 && lv < 2) lv++;
+    var a = S.a, night = a.cravings === "cena" || a.cravings === "madrugada" || (a.blockers || []).indexOf("noche") > -1;
+    return {
+      size: ["S", "M", "L"][lv], night: night,
+      oats: ["3 cucharadas", "4 cucharadas", "5 cucharadas"][lv], chia: ["1 cucharada", "1 cucharada y media", "2 cucharadas"][lv]
+    };
+  }
+  function medidaLine() {
+    var m = medida(), sg = S.a.sizegoal && S.a.sizegoal !== "nose" ? label("sizegoal", S.a.sizegoal) : "";
+    return "Tu medida: <b>Vaso " + m.size + "</b>, en la mañana" + (m.night ? " + un vaso chico en la noche, " + (S.a.cravings === "madrugada" ? "porque te despiertas con hambre" : "por tus antojos de la noche") : "") + "." +
+      (sg ? " Tu meta: volver a la talla <b>" + esc(sg.replace(/^.*\((.*)\)$/, "$1")) + "</b>." : "");
+  }
+  function medidaCard() {
+    var m = medida();
+    return '<div class="card medida" style="margin-top:14px;display:flex;gap:14px;align-items:center">' + CUP(46) +
+      '<div><b style="font:800 19px var(--display)">Tu medida: Vaso ' + m.size + "</b>" +
+      '<p style="margin:4px 0 0;color:var(--texto-2);font-size:15.5px">1 taza de leche (o bebida vegetal), ' + m.oats + " de avena, " + m.chia + " de chía y una pizca de canela. Tu hora: <b>en la mañana</b>" + (m.night ? ", y un vaso chico en la noche" : "") + ".</p></div></div>";
+  }
+  // Urgencia real y gratis del calendario (OFERTA-V2 3.5): "si empiezas hoy, terminas tus 21 días el [hoy + 21]".
+  function endInfo() {
+    var d = new Date(); d.setDate(d.getDate() + 21);
+    var y = d.getFullYear(), tg = new Date(y, 10, 1); tg.setDate(1 + ((11 - tg.getDay()) % 7) + 21); // 4.º jueves de noviembre
+    var when = d < tg ? "antes de Thanksgiving y de las posadas" : d < new Date(y, 11, 16) ? "antes de las posadas" : d < new Date(y, 11, 24) ? "antes de Navidad" : "";
+    var txt = d.toLocaleDateString("es-MX", { day: "numeric", month: "long" });
+    return { date: txt, when: when };
+  }
 
   /* ---------- Interacciones ---------- */
   function bind(s) {
