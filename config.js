@@ -14,6 +14,10 @@ window.SACIANTE_CONFIG = {
   UPSELL_URL: "https://whop.com/checkout/plan_6HqdieE1PDaZd",   // Plan Saciante 90 · USD 27
   DOWNSELL_URL: "https://whop.com/checkout/plan_O8cTfalg3IxBR", // Plan Saciante 90 solo menús · USD 13
 
+  // Medición por etapa (Franco: aterrizaje → inicio del quiz → oferta → clic → checkout). Se guarda en Supabase vía la app.
+  // Lectura: GET https://app-production-e884.up.railway.app/api/admin/funnel?days=3 con la cabecera x-admin-key. Vacío = no se mide.
+  TRACK_URL: "https://app-production-e884.up.railway.app/api/t",
+
   // App del producto (Railway). gracias.html manda aquí a la clienta con sus respuestas del quiz.
   APP_URL: "https://app-production-e884.up.railway.app",
 

@@ -234,3 +234,5 @@ details p{margin:0 0 14px;color:var(--texto-2)}
 .alertbox svg{flex:none;width:22px;height:22px;fill:none;stroke:var(--alerta);stroke-width:2.2}
 .alertbox b{display:block}.alertbox span{font-size:15px;color:var(--texto-2)}
 .price .today{font:700 14px var(--body);color:var(--alerta);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+/* Tallas: letra en lugar de icono */
+.ic-l{font:800 19px var(--display);color:var(--noche);letter-spacing:-.02em}

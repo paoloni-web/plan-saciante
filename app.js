@@ -24,6 +24,28 @@
     if (window.console) console.info("[pixel" + (pixelOn ? "" : " · sin ID") + "]", ev, params || {});
   }
 
+  /* ---------- Embudo por etapa (Franco: aterrizaje, inicio, oferta, clic). Va a la app (Supabase) y al píxel. ---------- */
+  var SID = (function () {
+    try { var v = sessionStorage.getItem("sac_sid"); if (!v) { v = Date.now().toString(36) + Math.random().toString(36).slice(2, 8); sessionStorage.setItem("sac_sid", v); } return v; } catch (e) { return "anon"; }
+  })();
+  function beacon(step, name, ev) {
+    if (!C.TRACK_URL) return;
+    var utm = ""; try { utm = sessionStorage.getItem("sac_qs") || ""; } catch (e) {}
+    var body = JSON.stringify({ sid: SID, step: step, name: name, ev: ev || "view", utm: utm });
+    try {
+      if (navigator.sendBeacon) navigator.sendBeacon(C.TRACK_URL, new Blob([body], { type: "text/plain" }));
+      else fetch(C.TRACK_URL, { method: "POST", body: body, keepalive: true, mode: "no-cors" });
+    } catch (e) {}
+  }
+  var seenStep = {};
+  function trackStep(i, s) {
+    if (seenStep[i]) return;
+    seenStep[i] = true;
+    var nm = s.id || (s.type + (s.kind ? "-" + s.kind : ""));
+    beacon(i, nm, "view");
+    if (pixelOn && window.fbq) window.fbq("trackCustom", "QuizStep", { step: i, name: nm });
+  }
+
   /* ---------- UTMs: se guardan y se pasan al checkout ---------- */
   try {
     if (location.search && /utm_|fbclid|src=|sck=/.test(location.search)) sessionStorage.setItem("sac_qs", location.search.slice(1));
@@ -92,9 +114,13 @@
   }
 
   /* ---------- Pantallas ---------- */
+  var SIZES = [
+    { v: "ch", t: "Chica (S)", l: "CH" }, { v: "m", t: "Mediana (M)", l: "M" },
+    { v: "g", t: "Grande (L)", l: "G" }, { v: "xg", t: "Extra grande (XL)", l: "XG" },
+    { v: "2xg", t: "2XG o más", l: "2XG" }, { v: "nose", t: "No estoy segura", l: "?" } ];
   var SCREENS = [
-    { type: "landing" },
-    { id: "age", type: "single", title: "¿Cuántos años tienes?", sub: "Tu plan cambia según tu etapa.", tiles: true, options: [
+    // Franco (L 2.4, L 4.2): la portada es la landing y abre con una pregunta fácil.
+    { id: "age", type: "landing", options: [
       { v: "18-34", t: "18 a 34", i: "sun" }, { v: "35-44", t: "35 a 44", i: "leaf" },
       { v: "45-54", t: "45 a 54", i: "heart" }, { v: "55+", t: "55 o más", i: "star" } ] },
     { id: "bodynow", type: "single", title: "¿Cómo describirías tu cuerpo hoy?", options: [
@@ -102,6 +128,13 @@
       { v: "hinchada", t: "Me siento hinchada casi siempre", i: "belly" },
       { v: "sobrepeso", t: "Tengo sobrepeso", i: "waist" },
       { v: "mucho", t: "Quiero un cambio grande", i: "sparkle" } ] },
+    { type: "info", render: function () {
+      var colors = ["#9C4A1A", "#1E7A4C", "#2B3763", "#C98A12"];
+      return '<h2>No estás sola</h2>' +
+        '<p class="sub">Sentirse hinchada en la tarde, tener antojos de noche y ver que la báscula no se mueve aunque comas poco es de lo más común después de los 35.</p>' +
+        '<div class="card center"><span class="faces" aria-hidden="true" style="justify-content:center">' + ["L", "M", "C", "R"].map(function (x, k) { return '<i style="background:' + colors[k] + '">' + x + "</i>"; }).join("") + "</span>" +
+        '<p style="margin:12px 0 0;font-size:18px;font-weight:600">La buena noticia: casi siempre tiene que ver con lo que pasa <span style="color:var(--canela)">en la tarde y en la noche</span>, y eso se puede cambiar.</p></div>';
+    }, cta: "Continuar" },
     { id: "zones", type: "multi", title: "¿Dónde notas más el cambio?", sub: "Elige todas las que quieras.", options: [
       { v: "panza", t: "Panza", i: "belly" }, { v: "cintura", t: "Cintura y costados", i: "waist" },
       { v: "brazos", t: "Brazos", i: "arm" }, { v: "piernas", t: "Piernas y cadera", i: "leg" },
@@ -180,6 +213,9 @@
     { id: "weight", type: "weight", title: "¿Cuánto pesas hoy?", sub: "Un aproximado está bien." },
     { id: "height", type: "height", title: "¿Cuánto mides?" },
     { id: "goal", type: "goal", title: "¿Cuál es tu peso ideal?", sub: "El que te haría sentir cómoda." },
+    // Modelado del competidor de Franco (L 3.5): "talla de ropa, talla de ropa deseada".
+    { id: "size", type: "single", title: "¿Qué talla de ropa usas hoy?", tiles: true, options: SIZES },
+    { id: "sizegoal", type: "single", title: function () { return N() + ", ¿qué talla te gustaría volver a usar?"; }, tiles: true, options: SIZES },
     { id: "routine", type: "single", title: "¿Cómo es tu día a día?", options: [
       { v: "fuera", t: "Trabajo fuera de casa", i: "briefcase" },
       { v: "casa", t: "Trabajo desde casa", i: "home" },
@@ -234,10 +270,11 @@
     var t = s.type;
     document.body.classList.toggle("dark", t === "loading");
     $top.hidden = t === "landing";
-    $back.disabled = S.i <= 1 || t === "loading" || t === "offer";
+    $back.disabled = S.i < 1 || t === "loading" || t === "offer";
+    trackStep(S.i, s);
     setProgress();
     var html = "";
-    if (t === "landing") html = landing();
+    if (t === "landing") html = landing(s);
     else if (t === "single" || t === "multi") html = question(s);
     else if (t === "info") html = s.render() + dock(s.cta || "Continuar");
     else if (t === "name") html = nameScreen(s);
@@ -258,15 +295,17 @@
   }
   function tt(x) { return typeof x === "function" ? x() : x; }
 
-  function landing() {
+  function landing(s) {
+    // Franco (L 4.2): "Responde para obtener tu plan … personalizado / Selecciona tu …", con la primera pregunta en la portada.
+    var opts = s.options.map(function (o) {
+      return '<button type="button" class="opt tile" data-v="' + o.v + '" aria-pressed="' + (S.a.age === o.v) + '"><span class="ic">' + ico(o.i) + '</span><span class="tx">' + esc(o.t) + "</span></button>";
+    }).join("");
     return '<section class="hero">' +
       '<span class="kicker">' + ico("moon").replace("<svg", '<svg style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2"') + " Test gratuito de 2 minutos</span>" +
-      "<h1>El licuado de la noche para <em>deshinchar la panza</em> y dejar los antojos</h1>" +
-      '<p class="sub" style="margin:0">Responde unas preguntas y recibe tu plan de 21 días según tu cuerpo, tu rutina y tus horarios.</p>' +
-      '<div class="hero-art" aria-hidden="true"><div class="stars"></div><div class="moon"></div>' +
-      '<svg class="cup" viewBox="0 0 120 150"><defs><clipPath id="hc"><path d="M14 10h92l-10 130H24z"/></clipPath></defs><g clip-path="url(#hc)"><rect width="120" height="150" fill="#2B3763"/><rect y="38" width="120" height="120" fill="#F3E4C8"/><path d="M0 40 Q30 30 60 40 T120 40 V52 H0z" fill="#FFF6E6"/><circle cx="44" cy="80" r="2.4" fill="#9C4A1A"/><circle cx="70" cy="96" r="2" fill="#9C4A1A"/><circle cx="58" cy="118" r="2.2" fill="#9C4A1A"/><circle cx="82" cy="70" r="1.8" fill="#9C4A1A"/></g><path d="M14 10h92l-10 130H24z" fill="none" stroke="#F5F1EA" stroke-width="4" stroke-linejoin="round"/><path d="M86 0l-8 50" stroke="#F2B544" stroke-width="6" stroke-linecap="round"/></svg>' +
-      '<p class="recipe"><b>5 ingredientes del súper.</b> Avena, chía, canela, yogur y fruta. Menos de $1 por vaso.</p></div>' +
-      '<button class="cta" type="button" data-next>Empezar mi test</button>' +
+      "<h1>Responde y recibe tu plan personalizado para <em>deshinchar la panza</em> y dejar los antojos de la noche</h1>" +
+      '<p class="sub" style="margin:0">Un licuado de 5 ingredientes del súper y un plan de 21 días según tu cuerpo, tu rutina y tus horarios.</p>' +
+      '<h2 style="font-size:20px;margin:6px 0 0">Selecciona tu edad para empezar</h2>' +
+      '<div class="opts grid2" role="group" aria-label="Tu edad">' + opts + "</div>" +
       '<div class="proof"><span class="faces" aria-hidden="true"><i style="background:#9C4A1A">L</i><i style="background:#1E7A4C">M</i><i style="background:#2B3763">R</i><i style="background:#C98A12">C</i></span><span>Mujeres de México y EE. UU. ya lo están haciendo</span></div>' +
       '<div class="trust"><span>' + ico("check") + "Gratis</span><span>" + ico("check") + "Sin registrarte</span><span>" + ico("check") + "Resultado al instante</span></div>" +
       "</section>";
@@ -279,7 +318,7 @@
       var sel = multi ? (cur || []).indexOf(o.v) > -1 : cur === o.v;
       var attr = multi ? ' role="checkbox" aria-checked="' + sel + '"' : ' aria-pressed="' + sel + '"';
       return '<button type="button" class="opt' + (s.tiles ? " tile" : "") + '" data-v="' + o.v + '"' + attr + ">" +
-        '<span class="ic">' + ico(o.i) + "</span>" +
+        '<span class="ic">' + (o.l ? '<b class="ic-l">' + esc(o.l) + "</b>" : ico(o.i)) + "</span>" +
         '<span class="tx">' + esc(o.t) + (o.s ? "<small>" + esc(o.s) + "</small>" : "") + "</span>" +
         (multi ? TICK : "") + "</button>";
     }).join("");
@@ -358,6 +397,15 @@
     if (out.length < 2) out.push(["Cenas bajas en proteína y fibra", "Es el patrón más común en mujeres de tu edad, y el más fácil de corregir."]);
     return out.slice(0, 4);
   }
+  function profile() {
+    var a = S.a, night = a.cravings === "cena" || a.cravings === "madrugada" || (a.blockers || []).indexOf("noche") > -1;
+    var bloat = a.bloat === "diario" || a.bloat === "tarde";
+    if (night && bloat) return "Antojo nocturno con hinchazón";
+    if (night) return "Antojo nocturno";
+    if (bloat) return "Hinchazón de tarde y noche";
+    if (a.tried === "rebote" || a.tried === "nada") return "Rebote por dietas de hambre";
+    return "Cena poco saciante";
+  }
   function result() {
     var b = bmi(), bv = b.toFixed(1);
     var cat = b < 18.5 ? "Bajo" : b < 25 ? "Normal" : b < 30 ? "Sobrepeso" : "Obesidad";
@@ -365,6 +413,9 @@
     var sig = signals();
     return '<span class="badge warn">' + ico("alert").replace("<svg", '<svg style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2"') + " " + sig.length + " señales detectadas</span>" +
       '<h2 style="margin-top:12px">' + N() + ", este es tu resultado</h2>" +
+      // Franco (L 4.1): "según todas tus respuestas, tu perfil es tanto", con la meta y el plazo de la persona.
+      '<div class="card" style="margin-bottom:12px"><p style="margin:0">Según tus respuestas, tu perfil es <b>' + esc(profile()) + "</b>.</p>" +
+      (S.w > S.g ? '<p style="margin:8px 0 0">Tu meta: <b>' + S.g + " " + S.unit + "</b> (" + (S.w - S.g) + " " + S.unit + " menos)" + (S.a.sizegoal && S.a.sizegoal !== "nose" ? ", volver a la talla <b>" + esc(label("sizegoal", S.a.sizegoal)) + "</b>" : "") + ". Tu plan: <b>21 días</b> para arrancar.</p>" : "") + "</div>" +
       '<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><b>Tu IMC</b><span style="font:800 30px var(--display)">' + bv + ' <small style="font:600 15px var(--body);color:var(--texto-2)">' + cat + "</small></span></div>" +
       '<div class="imc"><div class="imc-bar"><span class="imc-pin" style="left:' + pin + '%"></span></div><div class="imc-scale"><span>Bajo</span><span>Normal</span><span>Sobrepeso</span><span>Obesidad</span></div></div>' +
       '<ul class="signals">' + sig.map(function (x) { return "<li>" + ico("alert") + "<div><b>" + x[0] + "</b><span>" + x[1] + "</span></div></li>"; }).join("") + "</ul></div>" +
@@ -381,10 +432,6 @@
       dock("Quiero mi plan");
   }
 
-  function nextSunday() {
-    var d = new Date(); var add = (7 - d.getDay()) % 7; d.setDate(d.getDate() + add);
-    return d.toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long" });
-  }
   function offer() {
     track("ViewContent", { content_name: "Plan Saciante 21", value: C.PRICE, currency: C.CURRENCY }, true);
     var goals = (S.a.goals || ["deshinchar", "antojos"]).map(function (v) { return label("goals", v).toLowerCase(); });
@@ -402,7 +449,7 @@
       '<div class="phase"><div class="d">Días<b>8-14</b></div><div><b>Ajustar</b><p>Menú con más proteína y fibra. Los antojos bajan.</p></div></div>' +
       '<div class="phase"><div class="d">Días<b>15-21</b></div><div><b>Sostener</b><p>Ya es tu hábito. Postres sin culpa incluidos.</p></div></div></div></section>' +
       "<section><h2>Todo lo que recibes hoy</h2><ul class=\"stack\">" +
-      stackItem("", "App Plan Saciante 21", "Tu menú de cada día, check-in de hábitos, licuado + 6 variantes y gráfica de progreso", 67) +
+      stackItem("", "App Plan Saciante 21", "Tu menú de cada día, check-in de hábitos, licuado + 6 variantes y gráfica de progreso", 47) +
       stackItem("", "Lista del súper automática", "Se arma sola cada semana con tu menú. La compartes por WhatsApp en un toque", 20) +
       stackItem("b", "Bono 1 · 30 Postres Sin Culpa", "Dentro de la app, con filtros por tiempo y por lo que no comes", 27) +
       stackItem("b", "Bono 2 · 20 Licuados y Aguas Frescas", "Jamaica, pepino-limón, avena-canela… para no aburrirte", 19) +
@@ -411,7 +458,7 @@
       "</ul>" +
       '<div class="price"><div class="today">Oferta válida solo por hoy</div><div class="was">Valor total <s>$' + anchor + " USD</s></div>" +
       '<div class="now">$' + price + "<small>USD</small></div>" +
-      '<p class="why">Precio de lanzamiento hasta el <b>' + nextSunday() + "</b>. Después sube a $" + C.PRICE_AFTER + " y los bonos se retiran.</p>" +
+      '<p class="why">Precio de lanzamiento. Después sube a $' + C.PRICE_AFTER + " USD y los bonos se retiran.</p>" +
       cta.replace('class="cta"', 'class="cta"') +
       '<div class="secure">' + ico("lock") + " Compra segura · Acceso inmediato a tu app · Satisfacción garantizada</div></div></section>" +
       offerReviews() + '<section class="card guarantee"><div class="seal"><span><b>30</b>días</span></div><div><b>Garantía de 30 días</b><p style="margin:4px 0 0;color:var(--texto-2);font-size:15.5px">Si en 30 días no sientes la diferencia, te devolvemos cada centavo. Escribes un correo y listo, sin preguntas.</p></div></section>' +
@@ -458,7 +505,7 @@
   function bind(s) {
     $main.querySelectorAll("[data-next]").forEach(function (b) { b.addEventListener("click", next); });
 
-    if (s.type === "single") {
+    if (s.type === "single" || s.type === "landing") {
       $main.querySelectorAll(".opt").forEach(function (b) {
         b.addEventListener("click", function () {
           S.a[s.id] = b.dataset.v; save();
@@ -558,6 +605,7 @@
       a.href = withQs(C.CHECKOUT_URL);
       a.addEventListener("click", function () {
         track("InitiateCheckout", { content_name: "Plan Saciante 21", value: C.PRICE, currency: C.CURRENCY, num_items: 1 });
+        beacon(LAST_QUIZ, "offer", "checkout_click");
       });
     });
   }
