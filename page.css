@@ -6,7 +6,7 @@
 .post ul.list{list-style:none;padding:0;margin:16px 0;display:grid;gap:10px}
 .post ul.list li{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--avena);border-radius:16px;padding:12px 14px}
 .post ul.list svg{flex:none;width:22px;height:22px;fill:none;stroke:var(--agave);stroke-width:2.6;margin-top:2px}
-.post .no{display:block;text-align:center;margin-top:10px;color:var(--texto-2);font-weight:600;min-height:48px;line-height:48px}
+.post .no{display:block;text-align:center;margin-top:10px;color:var(--texto-2);font-weight:600;min-height:48px;line-height:1.35;padding:12px 8px;width:100%;border:0;background:none;cursor:pointer;text-decoration:underline}
 .dl{display:grid;gap:10px;margin:16px 0}
 .dl a{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--avena);border-radius:16px;padding:14px;text-decoration:none;color:var(--noche);font-weight:700;min-height:60px}
 .dl a span{margin-left:auto;color:var(--agave);font-size:14px}
