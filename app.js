@@ -388,7 +388,7 @@
     }).join("") + '</div><div class="dots" aria-hidden="true">' + REVIEWS.map(function (_, i) { return "<i" + (i ? "" : ' class="on"') + "></i>"; }).join("") + "</div></div>";
   }
   // 2 vídeos testimonio (Franco L 4.4 ≈16:07: "Yo tengo dos videos. En cada embudo"). Muted autoplay + subtítulos quemados; tocar = con sonido.
-  var SND = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 010 6M18.5 6.5a7.5 7.5 0 010 11" fill="none"/></svg><span>Escuchar</span>';
+  var SND = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 010 6M18.5 6.5a7.5 7.5 0 010 11" fill="none"/></svg><span>Escuchar</span>';
   function videos() {
     var v = C.VIDEOS || [];
     if (!v.length) return "";
