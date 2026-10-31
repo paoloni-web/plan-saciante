@@ -2,12 +2,16 @@
 (function () {
   "use strict";
   var C = window.SACIANTE_CONFIG || {};
+  // Marca centralizada en config.js (BRAND / PRODUCT).
+  var BR = C.BRAND || "Plan Saciante", PR = C.PRODUCT || BR + " 21";
   var $main = document.getElementById("main");
   var $top = document.getElementById("top");
   var $back = document.getElementById("back");
   var $milk = document.getElementById("milk");
   var $pct = document.getElementById("pct");
   var $progress = document.getElementById("progress");
+  document.title = BR + " · Test de 2 minutos";
+  var $brand = document.querySelector(".top .brand"); if ($brand) $brand.textContent = BR;
 
   /* ---------- Meta Pixel (inactivo si no hay ID) ---------- */
   var pixelOn = !!(C.META_PIXEL_ID && String(C.META_PIXEL_ID).trim());
@@ -170,7 +174,7 @@
       return '<div class="center" style="margin-top:12px"><span class="badge ok">' + ico("leaf").replace("<svg", '<svg style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2"') + " Buena noticia</span></div>" +
         '<h2 class="center" style="margin-top:14px">' + N() + ", no te falta fuerza de voluntad.</h2>" +
         '<p class="sub center">' + line + "</p>" +
-        '<div class="card center"><p style="margin:0;font-size:19px;font-weight:600">El Plan Saciante no te quita comida.<br>Te da <span style="color:var(--canela)">un licuado para la noche</span> que llena y calma el antojo.</p></div>';
+        '<div class="card center"><p style="margin:0;font-size:19px;font-weight:600">El ' + BR + ' no te quita comida.<br>Te da <span style="color:var(--canela)">un licuado para la noche</span> que llena y calma el antojo.</p></div>';
     }, cta: "Quiero saber más" },
     { id: "blockers", type: "multi", title: "¿Qué te frena hoy?", sub: "Elige todas las que apliquen.", options: [
       { v: "hambre", t: "Me da hambre y termino cediendo", i: "hunger" },
@@ -181,7 +185,7 @@
     { type: "info", render: function () {
       return "<h2>Lo que gastan muchas mujeres vs. lo que vas a gastar tú</h2>" +
         '<div class="compare"><div class="a"><b>Lo de siempre</b>Malteadas de marca, suplementos, comida «light», gimnasio que no usas: fácil más de $100 al mes.</div>' +
-        '<div class="b"><b>Plan Saciante</b>Avena, chía, canela, yogur y fruta del súper. Menos de <b style="display:inline;font-size:inherit">$1</b> por licuado.</div></div>' +
+        '<div class="b"><b>' + BR + '</b>Avena, chía, canela, yogur y fruta del súper. Menos de <b style="display:inline;font-size:inherit">$1</b> por licuado.</div></div>' +
         '<p class="sub" style="margin-top:16px">Sin polvos raros. Sin pastillas. Solo tu licuadora.</p>';
     }, cta: "Continuar" },
     { id: "goals", type: "multi", title: "¿Qué quieres lograr en 21 días?", sub: "Elige todas las que quieras.", options: [
@@ -368,12 +372,32 @@
       '<p class="note">Ilustración del recorrido típico del plan. Cada cuerpo responde distinto.</p>' + dock("Ver mi plan");
   }
 
-  var REVIEWS = [
-    ["Lupita, 47 · Guadalajara", "Ya no me levanto a buscar pan a las 11. El licuado de canela me deja tranquila."],
-    ["Maribel, 52 · Houston, TX", "La primera semana noté la panza menos inflamada. Lo hago con lo que ya tengo en casa."],
-    ["Claudia, 44 · CDMX", "Lo que más me gustó es que no paso hambre. Por fin algo que sí puedo sostener."],
-    ["Rosa, 58 · Los Ángeles, CA", "Duermo mejor y amanezco con más ganas. Mis hijas ya me preguntaron qué estoy haciendo."]
-  ];
+  // Testimonios: en config.js (REVIEWS con foto IA y VIDEOS). Franco L 4.2 ≈47:03: nombre + ciudad + estrellas.
+  var REVIEWS = (C.REVIEWS && C.REVIEWS.length ? C.REVIEWS : [
+    { name: "Lupita", age: 47, city: "Guadalajara", text: "Ya no me levanto a buscar pan a las 11. El licuado de canela me deja tranquila." }
+  ]);
+  var STARS = '<span class="stars" aria-label="5 de 5 estrellas">★★★★★</span>';
+  var NOTE = function () { return C.SHOW_TESTIMONIAL_NOTE ? '<p class="fine">Testimonios ilustrativos. Los resultados varían de persona a persona.</p>' : ""; };
+  function who(r) { return esc(r.name) + (r.age ? ", " + r.age : "") + " · " + esc(r.city); }
+  // Slide de 4 testimonios (llamada 02-oct: "un slide de cuatro testimonios hechos con IA").
+  function carousel() {
+    return '<div class="slider" role="region" aria-label="Testimonios"><div class="slides">' + REVIEWS.map(function (r, i) {
+      return '<figure class="slide" aria-label="Testimonio ' + (i + 1) + " de " + REVIEWS.length + '">' +
+        (r.photo ? '<img class="slide-ph" src="' + esc(r.photo) + '" alt="Foto de ' + esc(r.name) + '" width="512" height="512" loading="lazy" decoding="async">' : "") +
+        "<figcaption>" + STARS + "<p>“" + esc(r.text) + "”</p><b>" + who(r) + "</b></figcaption></figure>";
+    }).join("") + '</div><div class="dots" aria-hidden="true">' + REVIEWS.map(function (_, i) { return "<i" + (i ? "" : ' class="on"') + "></i>"; }).join("") + "</div></div>";
+  }
+  // 2 vídeos testimonio (Franco L 4.4 ≈16:07: "Yo tengo dos videos. En cada embudo"). Muted autoplay + subtítulos quemados; tocar = con sonido.
+  var SND = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 010 6M18.5 6.5a7.5 7.5 0 010 11" fill="none"/></svg><span>Escuchar</span>';
+  function videos() {
+    var v = C.VIDEOS || [];
+    if (!v.length) return "";
+    return '<div class="vids">' + v.map(function (x) {
+      return '<figure class="vid"><video data-vid muted loop playsinline preload="none" poster="' + esc(x.poster) + '" aria-label="Video testimonio de ' + esc(x.name) + '"><source src="' + esc(x.src) + '" type="video/mp4"></video>' +
+        '<button type="button" class="vid-snd" aria-label="Ver el video de ' + esc(x.name) + ' con sonido">' + SND + "</button>" +
+        "<figcaption><b>" + esc(x.name) + "</b> · " + esc(x.city) + "</figcaption></figure>";
+    }).join("") + "</div>";
+  }
   function loading(s) {
     var plan = s.kind === "plan";
     var items = plan ? ["Eligiendo tus 6 licuados", "Armando tu menú de 21 días", "Ajustando la lista del súper", "Agregando tus bonos"]
@@ -419,28 +443,22 @@
       '<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><b>Tu IMC</b><span style="font:800 30px var(--display)">' + bv + ' <small style="font:600 15px var(--body);color:var(--texto-2)">' + cat + "</small></span></div>" +
       '<div class="imc"><div class="imc-bar"><span class="imc-pin" style="left:' + pin + '%"></span></div><div class="imc-scale"><span>Bajo</span><span>Normal</span><span>Sobrepeso</span><span>Obesidad</span></div></div>' +
       '<ul class="signals">' + sig.map(function (x) { return "<li>" + ico("alert") + "<div><b>" + x[0] + "</b><span>" + x[1] + "</span></div></li>"; }).join("") + "</ul></div>" +
-      '<p class="sub" style="margin-top:18px">La buena noticia: todas tienen que ver con <b>hábitos de la tarde y la noche</b>, y es justo lo que el Plan Saciante trabaja.</p>' +
+      '<p class="sub" style="margin-top:18px">La buena noticia: todas tienen que ver con <b>hábitos de la tarde y la noche</b>, y es justo lo que el ' + BR + ' trabaja.</p>' +
       '<p class="note">El IMC es solo una referencia. Este test no es un diagnóstico médico.</p>' + dock("Ver cómo lo logran otras mujeres");
   }
   function testimonials() {
-    var colors = ["#9C4A1A", "#1E7A4C", "#2B3763", "#C98A12"];
-    return "<h2>Lo que cuentan quienes ya empezaron</h2>" +
-      '<div class="testis" style="margin-top:14px">' + REVIEWS.map(function (r, i) {
-        return '<article class="testi"><div class="who"><span class="av" style="background:' + colors[i] + '" aria-hidden="true">' + r[0][0] + "</span><div><b>" + r[0].split(",")[0] + '</b><div style="font-size:14px;color:var(--texto-2)">' + r[0].split(",")[1] + '</div></div><span class="stars" style="margin-left:auto" aria-label="5 de 5 estrellas">★★★★★</span></div><p>“' + r[1] + "”</p></article>";
-      }).join("") + "</div>" +
-      (C.SHOW_TESTIMONIAL_NOTE ? '<p class="fine">Testimonios ilustrativos. Los resultados varían de persona a persona.</p>' : "") +
-      dock("Quiero mi plan");
+    return "<h2>Lo que cuentan quienes ya empezaron</h2>" + carousel() + NOTE() + dock("Quiero mi plan");
   }
 
   function offer() {
-    track("ViewContent", { content_name: "Plan Saciante 21", value: C.PRICE, currency: C.CURRENCY }, true);
+    track("ViewContent", { content_name: PR, value: C.PRICE, currency: C.CURRENCY }, true);
     var goals = (S.a.goals || ["deshinchar", "antojos"]).map(function (v) { return label("goals", v).toLowerCase(); });
     var g = goals.slice(0, 2).join(" y ");
     var price = C.PRICE, anchor = C.ANCHOR;
     var cta = '<a class="cta" data-checkout href="' + esc(C.CHECKOUT_URL || "#") + '">Recibir mi plan · $' + price + " USD</a>";
     return '<div class="offer">' +
       '<div class="banner" role="timer">Esta oferta termina en: <b id="tm">' + C.TIMER_MINUTES + ":00</b></div>" +
-      "<h2>" + N() + ", tu Plan Saciante 21 personalizado está listo</h2>" +
+      "<h2>" + N() + ", tu " + PR + " personalizado está listo</h2>" +
       appMock() + todayVsAfter() +
       '<p class="sub">Hecho con tus respuestas para ayudarte a <b>' + esc(g) + "</b>, con recetas de tu súper y un licuado para cada noche. Todo dentro de <b>una app en tu celular</b>.</p>" +
       cta +
@@ -449,7 +467,7 @@
       '<div class="phase"><div class="d">Días<b>8-14</b></div><div><b>Ajustar</b><p>Menú con más proteína y fibra. Los antojos bajan.</p></div></div>' +
       '<div class="phase"><div class="d">Días<b>15-21</b></div><div><b>Sostener</b><p>Ya es tu hábito. Postres sin culpa incluidos.</p></div></div></div></section>' +
       "<section><h2>Todo lo que recibes hoy</h2><ul class=\"stack\">" +
-      stackItem("", "App Plan Saciante 21", "Tu menú de cada día, check-in de hábitos, licuado + 6 variantes y gráfica de progreso", 47) +
+      stackItem("", "App " + PR, "Tu menú de cada día, check-in de hábitos, licuado + 6 variantes y gráfica de progreso", 47) +
       stackItem("", "Lista del súper automática", "Se arma sola cada semana con tu menú. La compartes por WhatsApp en un toque", 20) +
       stackItem("b", "Bono 1 · 30 Postres Sin Culpa", "Dentro de la app, con filtros por tiempo y por lo que no comes", 27) +
       stackItem("b", "Bono 2 · 20 Licuados y Aguas Frescas", "Jamaica, pepino-limón, avena-canela… para no aburrirte", 19) +
@@ -476,7 +494,7 @@
   }
   // Mockup de la app (Franco: "hay que mostrar que vamos a entregar una aplicación", L 2.5; mockup del celular, L 4.4).
   function appMock() {
-    return '<figure class="appmock"><img src="app-mockup.png" width="1080" height="1080" alt="La app del Plan Saciante en un celular: tu día, tu menú y tu check-in" loading="eager"><figcaption>Tu plan vive en una app en tu celular</figcaption></figure>';
+    return '<figure class="appmock"><img src="app-mockup.png" width="1080" height="1080" alt="La app del ' + BR + ' en un celular: tu día, tu menú y tu check-in" loading="eager"><figcaption>Tu plan vive en una app en tu celular</figcaption></figure>';
   }
   // Franco L 4.2: bloque "Hoy / En 21 días" con barras en rojo y en verde (dos columnas al 50 %) + elemento de alerta.
   function todayVsAfter() {
@@ -490,11 +508,9 @@
     return '<section class="tv"><div class="tv-grid">' + col("Hoy", 1, "now") + col("En 21 días", 2, "after") + "</div>" +
       '<div class="alertbox" role="note">' + ico("alert") + "<div><b>Atención, " + N() + "</b><span>Si sigues igual, la hinchazón y los antojos de la noche suelen ir a más con los años. Empezar hoy es lo más fácil.</span></div></div></section>";
   }
+  // Franco 2.2 punto 7 (L 4.2 ≈67:35, L 4.4): testimonios en imagen + 2 vídeos, después del precio y antes de la garantía.
   function offerReviews() {
-    var colors = ["#9C4A1A", "#1E7A4C", "#2B3763", "#C98A12"];
-    return '<section><h2>Lo que dicen quienes ya lo usan</h2><div class="testis" style="margin-top:12px">' + REVIEWS.map(function (r, i) {
-      return '<article class="testi"><div class="who"><span class="av" style="background:' + colors[i % 4] + '" aria-hidden="true">' + r[0][0] + "</span><div><b>" + r[0].split(",")[0] + '</b><div style="font-size:14px;color:var(--texto-2)">' + r[0].split(",")[1] + '</div></div><span class="stars" style="margin-left:auto" aria-label="5 de 5 estrellas">★★★★★</span></div><p>“' + r[1] + "”</p></article>";
-    }).join("") + "</div>" + (C.SHOW_TESTIMONIAL_NOTE ? '<p class="fine">Testimonios ilustrativos. Los resultados varían de persona a persona.</p>' : "") + "</section>";
+    return '<section><h2>Lo que dicen quienes ya lo usan</h2>' + videos() + carousel() + NOTE() + "</section>";
   }
   function stackItem(cls, t, d, v) {
     return '<li><span class="mock ' + cls + '" aria-hidden="true"></span><span class="t"><b>' + t + "</b><span>" + d + '</span></span><span class="v" aria-label="Valor ' + v + ' dólares">$' + v + "</span></li>";
@@ -536,6 +552,39 @@
     if (s.type === "weight" || s.type === "height" || s.type === "goal") bindStepper(s);
     if (s.type === "loading") runLoader(s);
     if (s.type === "offer") bindOffer();
+    bindMedia();
+  }
+
+  // Carrusel (puntos) y vídeos: autoplay en silencio solo cuando se ven; al tocar, con sonido desde el inicio.
+  function bindMedia() {
+    $main.querySelectorAll(".slider").forEach(function (sl) {
+      var rail = sl.querySelector(".slides"), dots = sl.querySelectorAll(".dots i");
+      rail.addEventListener("scroll", function () {
+        var k = Math.round(rail.scrollLeft / (rail.firstChild.offsetWidth + 12));
+        dots.forEach(function (d, j) { d.className = j === k ? "on" : ""; });
+      }, { passive: true });
+    });
+    var vids = $main.querySelectorAll("video[data-vid]");
+    if (!vids.length) return;
+    var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var io = "IntersectionObserver" in window && !reduce ? new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        var v = e.target;
+        if (e.isIntersecting) { if (v.preload !== "auto") v.preload = "auto"; var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+        else if (v.muted) v.pause();
+      });
+    }, { threshold: 0.5 }) : null;
+    vids.forEach(function (v) {
+      if (io) io.observe(v);
+      var btn = v.parentNode.querySelector(".vid-snd");
+      btn.addEventListener("click", function () {
+        vids.forEach(function (o) { if (o !== v) { o.muted = true; o.parentNode.classList.remove("live"); } });
+        v.muted = false; v.loop = false; v.controls = true; v.currentTime = 0;
+        v.parentNode.classList.add("live");
+        var p = v.play(); if (p && p.catch) p.catch(function () {});
+        track("ViewContent", { content_name: "video_testimonio" });
+      });
+    });
   }
 
   function bindStepper(s) {
@@ -577,8 +626,10 @@
     var lp = document.getElementById("lp"), milk = document.getElementById("bigmilk");
     var lis = $main.querySelectorAll(".checks li"), tk = document.getElementById("tk"), ri = 0;
     function showReview() {
+      // Franco L 4.1 ≈12:30: "una pantalla de carga con testimonios acá abajo".
       var r = REVIEWS[ri++ % REVIEWS.length];
-      tk.innerHTML = '<div class="review"><span class="stars" aria-hidden="true">★★★★★</span><p>“' + r[1] + '”</p><small>' + r[0] + "</small></div>";
+      tk.innerHTML = '<div class="review">' + (r.photo ? '<img src="' + esc(r.photo) + '" alt="" width="56" height="56" decoding="async">' : "") +
+        '<div><span class="stars" aria-hidden="true">★★★★★</span><p>“' + esc(r.text) + "”</p><small>" + who(r) + "</small></div></div>";
     }
     showReview();
     var rv = setInterval(showReview, 2600); timers.push(rv);
@@ -604,7 +655,7 @@
     $main.querySelectorAll("[data-checkout]").forEach(function (a) {
       a.href = withQs(C.CHECKOUT_URL);
       a.addEventListener("click", function () {
-        track("InitiateCheckout", { content_name: "Plan Saciante 21", value: C.PRICE, currency: C.CURRENCY, num_items: 1 });
+        track("InitiateCheckout", { content_name: PR, value: C.PRICE, currency: C.CURRENCY, num_items: 1 });
         beacon(LAST_QUIZ, "offer", "checkout_click");
       });
     });

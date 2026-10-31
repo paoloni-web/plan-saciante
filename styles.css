@@ -149,6 +149,29 @@ input[type=range]{width:100%;accent-color:var(--agave);height:36px}
 .review .stars{color:var(--miel);letter-spacing:2px;font-size:14px}
 .review p{margin:4px 0 6px;font-size:15px;color:#F5F1EA}
 .review small{color:#AEB3C8;font-size:13px}
+.review{display:flex;gap:12px;align-items:flex-start}
+.review img{width:56px;height:56px;border-radius:50%;object-fit:cover;flex:none;border:2px solid var(--miel)}
+
+/* Testimonios IA: slide de 4 + 2 vídeos */
+.slider{margin-top:14px}
+.slides{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:2px 2px 8px;scrollbar-width:none}
+.slides::-webkit-scrollbar{display:none}
+.slide{flex:0 0 82%;max-width:340px;scroll-snap-align:center;margin:0;background:#fff;border:1px solid var(--avena);border-radius:var(--radius-m);overflow:hidden;box-shadow:var(--shadow)}
+.slide-ph{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;background:var(--avena)}
+.slide figcaption{padding:12px 14px 14px}
+.slide .stars{color:#C98A12;letter-spacing:2px;font-size:15px}
+.slide p{margin:4px 0 8px;font-size:16px}
+.slide b{font-size:14.5px;color:var(--texto-2);font-weight:600}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:4px}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--avena-2);transition:background .2s,width .2s}
+.dots i.on{background:var(--noche);width:18px;border-radius:4px}
+.vids{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.vid{position:relative;margin:0;border-radius:var(--radius-m);overflow:hidden;background:var(--noche);aspect-ratio:9/16}
+.vid video{display:block;width:100%;height:100%;object-fit:cover}
+.vid figcaption{position:absolute;left:0;right:0;top:0;padding:8px 10px;font-size:13px;color:#fff;background:linear-gradient(rgba(0,0,0,.55),transparent);pointer-events:none}
+.vid-snd{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:inline-flex;gap:6px;align-items:center;min-height:40px;padding:8px 12px;border:0;border-radius:999px;background:rgba(28,37,65,.82);color:#fff;font:600 13px var(--body);white-space:nowrap;cursor:pointer}
+.vid-snd svg{width:18px;height:18px;fill:currentColor;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
+.vid.live .vid-snd,.vid.live figcaption{display:none}
 
 /* Result */
 .badge{display:inline-flex;gap:6px;align-items:center;border-radius:999px;padding:6px 12px;font-weight:700;font-size:14px}
