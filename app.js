@@ -516,7 +516,7 @@
     var e = endInfo();
     return '<section class="tv"><div class="tv-grid">' + col("Hoy", 1, "now") + col("En 21 días", 2, "after") + "</div>" +
       '<p class="note">Así lo describen la mayoría de las mujeres al terminar las 3 fases. Cada cuerpo responde distinto.</p>' +
-      '<div class="alertbox" role="note">' + ico("alert") + "<div><b>" + N() + ", ojo:</b><span>si no cambias nada, la panza hinchada y los antojos suelen ir a más con los años. Si empiezas hoy, terminas tus 21 días el <b>" + esc(e.date) + "</b>" + (e.when ? ", " + e.when : "") + ".</span></div></div></section>";
+      '<div class="alertbox" role="note">' + ico("alert") + "<div><b>" + N() + ", ojo:</b><span>si no cambias nada, la panza hinchada y los antojos suelen ir a más con los años. Si empiezas hoy, terminas tus 21 días el <b style=\"display:inline\">" + esc(e.date) + "</b>" + (e.when ? ", " + e.when : "") + ".</span></div></div></section>";
   }
   // Franco 2.2 punto 7 (L 4.2 ≈67:35, L 4.4): testimonios en imagen + 2 vídeos, después del precio y antes de la garantía.
   function offerReviews() {
