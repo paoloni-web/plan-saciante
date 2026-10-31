@@ -341,7 +341,7 @@
       : ["Calculando tu índice de masa corporal", "Revisando tus horarios de antojo", "Analizando sueño e hidratación", "Detectando tus señales principales"];
     return '<div class="loader" aria-live="polite">' +
       '<svg class="bigcup" viewBox="0 0 40 52" aria-hidden="true"><defs><clipPath id="bc"><path d="M5 4h30l-4 44H9z"/></clipPath></defs><g clip-path="url(#bc)"><rect width="40" height="52" fill="#2B3763"/><rect id="bigmilk" y="52" width="40" height="52" fill="#F2B544"/></g><path d="M5 4h30l-4 44H9z" fill="none" stroke="#F5F1EA" stroke-width="2" stroke-linejoin="round"/></svg>' +
-      "<h2>" + (plan ? "Preparando tu Plan Saciante, " + N() + "…" : "Analizando tus respuestas, " + N() + "…") + "</h2>" +
+      "<h2>" + (plan ? "Estamos creando tu plan personalizado, " + N() + "…" : "Analizando tus respuestas, " + N() + "…") + "</h2>" +
       '<p class="sub" id="lp" style="margin:0;font:800 28px var(--display);color:#F2B544">0%</p>' +
       '<ul class="checks">' + items.map(function (x) { return '<li><span class="dot"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg></span>' + x + "</li>"; }).join("") + "</ul>" +
       '<div class="ticker" id="tk"></div></div>';
@@ -392,9 +392,9 @@
     var price = C.PRICE, anchor = C.ANCHOR;
     var cta = '<a class="cta" data-checkout href="' + esc(C.CHECKOUT_URL || "#") + '">Recibir mi plan · $' + price + " USD</a>";
     return '<div class="offer">' +
-      '<div class="banner" role="timer">Tu plan está reservado por <b id="tm">' + C.TIMER_MINUTES + ":00</b></div>" +
+      '<div class="banner" role="timer">Esta oferta termina en: <b id="tm">' + C.TIMER_MINUTES + ":00</b></div>" +
       "<h2>" + N() + ", tu Plan Saciante 21 personalizado está listo</h2>" +
-      appMock() +
+      appMock() + todayVsAfter() +
       '<p class="sub">Hecho con tus respuestas para ayudarte a <b>' + esc(g) + "</b>, con recetas de tu súper y un licuado para cada noche. Todo dentro de <b>una app en tu celular</b>.</p>" +
       cta +
       "<section><h2>Tus 21 días, paso a paso</h2><div class=\"phases\">" +
@@ -409,12 +409,12 @@
       stackItem("b", "Bono 3 · Guía Antojos Bajo Control", "Plan de 7 días para la ansiedad de la noche, día por día en la app", 17) +
       stackItem("", "Recordatorios y acceso de por vida", "Alarmas para tu licuado y tu check-in. Entras desde cualquier celular con tu correo", 17) +
       "</ul>" +
-      '<div class="price"><div class="was">Valor total <s>$' + anchor + " USD</s></div>" +
+      '<div class="price"><div class="today">Oferta válida solo por hoy</div><div class="was">Valor total <s>$' + anchor + " USD</s></div>" +
       '<div class="now">$' + price + "<small>USD</small></div>" +
       '<p class="why">Precio de lanzamiento hasta el <b>' + nextSunday() + "</b>. Después sube a $" + C.PRICE_AFTER + " y los bonos se retiran.</p>" +
       cta.replace('class="cta"', 'class="cta"') +
       '<div class="secure">' + ico("lock") + " Compra segura · Acceso inmediato a tu app · Satisfacción garantizada</div></div></section>" +
-      '<section class="card guarantee"><div class="seal"><span><b>30</b>días</span></div><div><b>Garantía de 30 días</b><p style="margin:4px 0 0;color:var(--texto-2);font-size:15.5px">Si en 30 días no sientes la diferencia, te devolvemos cada centavo. Escribes un correo y listo, sin preguntas.</p></div></section>' +
+      offerReviews() + '<section class="card guarantee"><div class="seal"><span><b>30</b>días</span></div><div><b>Garantía de 30 días</b><p style="margin:4px 0 0;color:var(--texto-2);font-size:15.5px">Si en 30 días no sientes la diferencia, te devolvemos cada centavo. Escribes un correo y listo, sin preguntas.</p></div></section>' +
       "<section><h2>Preguntas frecuentes</h2>" +
       faq("¿Necesito ingredientes caros?", "No. Avena, chía, canela, yogur natural, leche o bebida vegetal y fruta. Todo lo encuentras en Walmart, Soriana, H-E-B o cualquier súper.") +
       faq("¿Voy a pasar hambre?", "No. El plan está hecho para que comas tres veces al día y llegues satisfecha a la noche. No se cuentan calorías.") +
@@ -430,6 +430,24 @@
   // Mockup de la app (Franco: "hay que mostrar que vamos a entregar una aplicación", L 2.5; mockup del celular, L 4.4).
   function appMock() {
     return '<figure class="appmock"><img src="app-mockup.png" width="1080" height="1080" alt="La app del Plan Saciante en un celular: tu día, tu menú y tu check-in" loading="eager"><figcaption>Tu plan vive en una app en tu celular</figcaption></figure>';
+  }
+  // Franco L 4.2: bloque "Hoy / En 21 días" con barras en rojo y en verde (dos columnas al 50 %) + elemento de alerta.
+  function todayVsAfter() {
+    var rows = [["Hinchazón", 78, 25], ["Antojos de noche", 82, 20], ["Energía", 30, 80]];
+    function col(title, idx, cls) {
+      return '<div class="tv-col ' + cls + '"><b>' + title + "</b>" + rows.map(function (r) {
+        var v = r[idx], good = r[0] === "Energía" ? v >= 50 : v < 50;
+        return '<div class="tv-row"><span>' + r[0] + '</span><div class="tv-track"><i style="width:' + v + "%;background:" + (good ? "#1E7A4C" : "#B3261E") + '"></i></div></div>';
+      }).join("") + "</div>";
+    }
+    return '<section class="tv"><div class="tv-grid">' + col("Hoy", 1, "now") + col("En 21 días", 2, "after") + "</div>" +
+      '<div class="alertbox" role="note">' + ico("alert") + "<div><b>Atención, " + N() + "</b><span>Si sigues igual, la hinchazón y los antojos de la noche suelen ir a más con los años. Empezar hoy es lo más fácil.</span></div></div></section>";
+  }
+  function offerReviews() {
+    var colors = ["#9C4A1A", "#1E7A4C", "#2B3763", "#C98A12"];
+    return '<section><h2>Lo que dicen quienes ya lo usan</h2><div class="testis" style="margin-top:12px">' + REVIEWS.map(function (r, i) {
+      return '<article class="testi"><div class="who"><span class="av" style="background:' + colors[i % 4] + '" aria-hidden="true">' + r[0][0] + "</span><div><b>" + r[0].split(",")[0] + '</b><div style="font-size:14px;color:var(--texto-2)">' + r[0].split(",")[1] + '</div></div><span class="stars" style="margin-left:auto" aria-label="5 de 5 estrellas">★★★★★</span></div><p>“' + r[1] + "”</p></article>";
+    }).join("") + "</div>" + (C.SHOW_TESTIMONIAL_NOTE ? '<p class="fine">Testimonios ilustrativos. Los resultados varían de persona a persona.</p>' : "") + "</section>";
   }
   function stackItem(cls, t, d, v) {
     return '<li><span class="mock ' + cls + '" aria-hidden="true"></span><span class="t"><b>' + t + "</b><span>" + d + '</span></span><span class="v" aria-label="Valor ' + v + ' dólares">$' + v + "</span></li>";
@@ -508,7 +526,7 @@
   }
 
   function runLoader(s) {
-    var p = 0, dur = s.kind === "plan" ? 5200 : 7600, step = 80;
+    var p = 0, dur = s.kind === "plan" ? 10000 : 7600, step = 80;
     var lp = document.getElementById("lp"), milk = document.getElementById("bigmilk");
     var lis = $main.querySelectorAll(".checks li"), tk = document.getElementById("tk"), ri = 0;
     function showReview() {
