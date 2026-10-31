@@ -48,7 +48,7 @@
 
   /* ---------- UTMs: se guardan y se pasan al checkout ---------- */
   try {
-    if (location.search && /utm_|fbclid|src=|sck=/.test(location.search)) sessionStorage.setItem("sac_qs", location.search.slice(1));
+    if (location.search && /utm_|fbclid|src=|sck=/.test(location.search)) sessionStorage.setItem("sac_qs", location.search.slice(1).split("&").filter(function (x) { return x && x.indexOf("reset=") !== 0; }).join("&"));
   } catch (e) {}
   function withQs(url) {
     var qs = ""; try { qs = sessionStorage.getItem("sac_qs") || ""; } catch (e) {}
