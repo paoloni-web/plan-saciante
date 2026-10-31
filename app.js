@@ -4,6 +4,7 @@
   var C = window.SACIANTE_CONFIG || {};
   // Marca centralizada en config.js (BRAND / PRODUCT).
   var BR = C.BRAND || "El Vaso Blanco", PR = C.PRODUCT || BR + " · Plan de 21 días";
+  var BRs = BR.replace(/^El /, ""); // "Vaso Blanco", para "tu Vaso Blanco"
   var $main = document.getElementById("main");
   var $top = document.getElementById("top");
   var $back = document.getElementById("back");
@@ -148,7 +149,7 @@
       var first = z[0] || "panza";
       // OFERTA-V2 4.4 (2): el mecanismo "despensa con candado" (la llave del original, sin decir "regula la insulina").
       return '<h2>No es tu culpa. Es cómo funciona el cuerpo después de los 35.</h2>' +
-        '<div class="card center" style="margin-bottom:14px">' + PANTRY + '</div>' +
+        '<div class="center" style="margin:4px 0 8px;display:flex;justify-content:center">' + PANTRY + '</div>' +
         '<p class="sub">Imagina una <b>despensa con candado</b>: guarda fácil y suelta difícil. Cada vez que picas algo (el pancito, la galleta, el jugo), el cuerpo vuelve a cerrar con llave.</p>' +
         '<p class="sub">Si picas todo el día, la despensa nunca se abre. Por eso comes poco y no bajas, y lo notas primero en la <b>' + esc(first) + "</b>.</p>";
     }, cta: "Tiene sentido, continuar" },
@@ -183,7 +184,7 @@
     { type: "info", render: function () {
       return "<h2>Lo que gastan muchas mujeres vs. lo que vas a gastar tú</h2>" +
         '<div class="compare"><div class="a"><b>Lo de siempre</b>Malteadas, tés, pastillas y gimnasio que no usas: fácil más de $100 al mes.</div>' +
-        '<div class="b"><b>Tu ' + BR + '</b>Leche, avena y chía, más una pizca de canela: <b style="display:inline;font-size:inherit">unos 10 pesos</b> por vaso.</div></div>' +
+        '<div class="b"><b>Tu ' + BRs + '</b>Leche, avena y chía, más una pizca de canela: <b style="display:inline;font-size:inherit">unos 10 pesos</b> por vaso.</div></div>' +
         '<p class="sub" style="margin-top:16px">Sin polvos raros. Sin pastillas. 3 cosas del súper y 1 minuto en la licuadora.</p>';
     }, cta: "Continuar" },
     { id: "goals", type: "multi", title: "¿Qué quieres lograr en 21 días?", sub: "Elige todas las que quieras.", options: [
@@ -234,7 +235,7 @@
       { v: "5-7", t: "5 a 7 vasos", i: "drop" },
       { v: "8+", t: "8 vasos o más", i: "check" } ] },
     { type: "projection" },
-    { id: "commit", type: "single", title: function () { return N() + ", ¿te comprometes a tomar tu " + BR + " 21 mañanas?"; }, sub: "Es 1 minuto en la licuadora. Es lo único que te vamos a pedir.", options: [
+    { id: "commit", type: "single", title: function () { return N() + ", ¿te comprometes a tomar tu " + BRs + " 21 mañanas?"; }, sub: "Es 1 minuto en la licuadora. Es lo único que te vamos a pedir.", options: [
       { v: "si", t: "Sí, me comprometo", i: "heart" },
       { v: "hoy", t: "Sí, y empiezo mañana mismo", i: "sparkle" },
       { v: "dudas", t: "Tengo algunas dudas", i: "question" } ], onDone: function () { track("Lead", { content_name: "quiz_completo" }, true); } },
@@ -445,7 +446,7 @@
       '<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><b>Tu peso para tu estatura (IMC)</b><span style="font:800 30px var(--display)">' + bv + ' <small style="font:600 15px var(--body);color:var(--texto-2)">' + cat + "</small></span></div>" +
       '<div class="imc"><div class="imc-bar"><span class="imc-pin" style="left:' + pin + '%"></span></div><div class="imc-scale"><span>Bajo</span><span>Normal</span><span>Sobrepeso</span><span>Obesidad</span></div></div>' +
       '<ul class="signals">' + sig.map(function (x) { return "<li>" + ico("alert") + "<div><b>" + x[0] + "</b><span>" + x[1] + "</span></div></li>"; }).join("") + "</ul></div>" +
-      '<p class="sub" style="margin-top:18px">La buena noticia: todas tienen que ver con <b>lo que desayunas y cuánto picas</b>, y es justo lo que arregla ' + BR + '.</p>' + medidaCard() +
+      '<p class="sub" style="margin-top:18px">La buena noticia: todas tienen que ver con <b>lo que desayunas y cuánto picas</b>, y es justo lo que arregla tu ' + BRs + '.</p>' + medidaCard() +
       '<p class="note">El IMC es solo una referencia. Este test no es un diagnóstico médico.</p>' + dock("Ver cómo lo logran otras mujeres");
   }
   function testimonials() {
@@ -460,7 +461,7 @@
     var under = '<div class="secure">' + ico("lock") + " Compra segura · Entras a tu app en 1 minuto · Pago único</div>";
     return '<div class="offer">' +
       '<div class="banner" role="timer">Tu medida queda guardada · Esta oferta termina en <b id="tm">' + C.TIMER_MINUTES + ":00</b></div>" +
-      "<h2>" + N() + ", tu plan del " + esc(BR.replace(/^El /, "")) + " personalizado está listo</h2>" +
+      "<h2>" + N() + ", tu plan del " + esc(BRs) + " personalizado está listo</h2>" +
       appMock() +
       '<p class="sub center" style="margin-top:-4px">Tu medida, tu hora y tus 21 días, en una app en tu celular.</p>' +
       todayVsAfter() +
