@@ -390,33 +390,35 @@
     var goals = (S.a.goals || ["deshinchar", "antojos"]).map(function (v) { return label("goals", v).toLowerCase(); });
     var g = goals.slice(0, 2).join(" y ");
     var price = C.PRICE, anchor = C.ANCHOR;
-    var cta = '<a class="cta" data-checkout href="' + esc(C.CHECKOUT_URL || "#") + '">Quiero mi plan por $' + price + "</a>";
+    var cta = '<a class="cta" data-checkout href="' + esc(C.CHECKOUT_URL || "#") + '">Recibir mi plan · $' + price + " USD</a>";
     return '<div class="offer">' +
       '<div class="banner" role="timer">Tu plan está reservado por <b id="tm">' + C.TIMER_MINUTES + ":00</b></div>" +
-      "<h2>" + N() + ", tu Plan Saciante de 21 días está listo</h2>" +
-      '<p class="sub">Hecho con tus respuestas para ayudarte a <b>' + esc(g) + "</b>, con recetas de tu súper y un licuado para cada noche.</p>" +
+      "<h2>" + N() + ", tu Plan Saciante 21 personalizado está listo</h2>" +
+      appMock() +
+      '<p class="sub">Hecho con tus respuestas para ayudarte a <b>' + esc(g) + "</b>, con recetas de tu súper y un licuado para cada noche. Todo dentro de <b>una app en tu celular</b>.</p>" +
       cta +
       "<section><h2>Tus 21 días, paso a paso</h2><div class=\"phases\">" +
       '<div class="phase"><div class="d">Días<b>1-7</b></div><div><b>Deshinchar</b><p>Licuado de la noche + aguas frescas. Notas la panza más ligera.</p></div></div>' +
       '<div class="phase"><div class="d">Días<b>8-14</b></div><div><b>Ajustar</b><p>Menú con más proteína y fibra. Los antojos bajan.</p></div></div>' +
       '<div class="phase"><div class="d">Días<b>15-21</b></div><div><b>Sostener</b><p>Ya es tu hábito. Postres sin culpa incluidos.</p></div></div></div></section>' +
       "<section><h2>Todo lo que recibes hoy</h2><ul class=\"stack\">" +
-      stackItem("", "Plan Saciante 21", "Receta del licuado + 6 variantes, menú de 21 días, lista del súper y registro diario", 67) +
-      stackItem("b", "Bono 1 · 30 Postres Sin Culpa", "Para el antojo dulce de la noche, sin azúcar añadida", 27) +
+      stackItem("", "App Plan Saciante 21", "Tu menú de cada día, check-in de hábitos, licuado + 6 variantes y gráfica de progreso", 67) +
+      stackItem("", "Lista del súper automática", "Se arma sola cada semana con tu menú. La compartes por WhatsApp en un toque", 20) +
+      stackItem("b", "Bono 1 · 30 Postres Sin Culpa", "Dentro de la app, con filtros por tiempo y por lo que no comes", 27) +
       stackItem("b", "Bono 2 · 20 Licuados y Aguas Frescas", "Jamaica, pepino-limón, avena-canela… para no aburrirte", 19) +
-      stackItem("b", "Bono 3 · Guía Antojos Bajo Control", "Plan de 7 días para la ansiedad de la noche + lista imprimible", 17) +
-      stackItem("", "Acceso de por vida y actualizaciones", "Descárgalo hoy, úsalo siempre", 17) +
+      stackItem("b", "Bono 3 · Guía Antojos Bajo Control", "Plan de 7 días para la ansiedad de la noche, día por día en la app", 17) +
+      stackItem("", "Recordatorios y acceso de por vida", "Alarmas para tu licuado y tu check-in. Entras desde cualquier celular con tu correo", 17) +
       "</ul>" +
       '<div class="price"><div class="was">Valor total <s>$' + anchor + " USD</s></div>" +
       '<div class="now">$' + price + "<small>USD</small></div>" +
       '<p class="why">Precio de lanzamiento hasta el <b>' + nextSunday() + "</b>. Después sube a $" + C.PRICE_AFTER + " y los bonos se retiran.</p>" +
       cta.replace('class="cta"', 'class="cta"') +
-      '<div class="secure">' + ico("lock") + " Pago seguro · Acceso inmediato a tu correo</div></div></section>" +
+      '<div class="secure">' + ico("lock") + " Compra segura · Acceso inmediato a tu app · Satisfacción garantizada</div></div></section>" +
       '<section class="card guarantee"><div class="seal"><span><b>30</b>días</span></div><div><b>Garantía de 30 días</b><p style="margin:4px 0 0;color:var(--texto-2);font-size:15.5px">Si en 30 días no sientes la diferencia, te devolvemos cada centavo. Escribes un correo y listo, sin preguntas.</p></div></section>' +
       "<section><h2>Preguntas frecuentes</h2>" +
       faq("¿Necesito ingredientes caros?", "No. Avena, chía, canela, yogur natural, leche o bebida vegetal y fruta. Todo lo encuentras en Walmart, Soriana, H-E-B o cualquier súper.") +
       faq("¿Voy a pasar hambre?", "No. El plan está hecho para que comas tres veces al día y llegues satisfecha a la noche. No se cuentan calorías.") +
-      faq("¿Cómo lo recibo?", "Al pagar te llega un correo con el acceso para descargar tu plan y tus bonos en PDF. Lo puedes ver en el celular o imprimirlo.") +
+      faq("¿Cómo lo recibo?", "Justo después de pagar entras a la app con el mismo correo de tu compra. Se instala en tu celular como cualquier app (iPhone y Android), sin descargar nada de la tienda.") +
       faq("¿Sirve si tengo más de 50?", "Sí. Está pensado para mujeres de 35 a 60 años. Si tomas medicamentos o tienes alguna condición, consúltalo antes con tu médico.") +
       faq("¿Es un medicamento o un suplemento?", "No. Es un plan de alimentación con recetas caseras. No vendemos pastillas ni polvos.") +
       faq("¿Y si no me funciona?", "Tienes 30 días de garantía. Si no te gusta, te devolvemos tu dinero.") +
@@ -424,6 +426,10 @@
       '<section style="margin-top:24px">' + cta + "</section>" +
       '<p class="disclaimer">Este material es educativo y no sustituye la consulta médica. Si estás embarazada, lactando, tienes diabetes, tomas medicamentos o tienes alguna condición de salud, consulta a tu médico antes de cambiar tu alimentación o tu actividad física. Los resultados varían de persona a persona. Este sitio no forma parte de Facebook ni de Meta Platforms, Inc.</p>' +
       "</div>";
+  }
+  // Mockup de la app (Franco: "hay que mostrar que vamos a entregar una aplicación", L 2.5; mockup del celular, L 4.4).
+  function appMock() {
+    return '<figure class="appmock"><img src="app-mockup.png" width="1080" height="1080" alt="La app del Plan Saciante en un celular: tu día, tu menú y tu check-in" loading="eager"><figcaption>Tu plan vive en una app en tu celular</figcaption></figure>';
   }
   function stackItem(cls, t, d, v) {
     return '<li><span class="mock ' + cls + '" aria-hidden="true"></span><span class="t"><b>' + t + "</b><span>" + d + '</span></span><span class="v" aria-label="Valor ' + v + ' dólares">$' + v + "</span></li>";

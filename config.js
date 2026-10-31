@@ -14,6 +14,9 @@ window.SACIANTE_CONFIG = {
   UPSELL_URL: "https://whop.com/checkout/plan_6HqdieE1PDaZd",   // Plan Saciante 90 · USD 27
   DOWNSELL_URL: "https://whop.com/checkout/plan_O8cTfalg3IxBR", // Plan Saciante 90 solo menús · USD 13
 
+  // App del producto (Railway). gracias.html manda aquí a la clienta con sus respuestas del quiz.
+  APP_URL: "https://app-production-e884.up.railway.app",
+
   PRICE: 9,
   PRICE_AFTER: 17,
   ANCHOR: 147,
