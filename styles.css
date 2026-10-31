@@ -224,6 +224,9 @@ input[type=range]{width:100%;accent-color:var(--agave);height:36px}
 .price .cta:hover{background:#FFC75E}
 .price .secure{display:flex;gap:8px;justify-content:center;align-items:center;font-size:13px;color:#AEB3C8;margin-top:12px}
 .price .secure svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2}
+.secure{display:flex;gap:8px;justify-content:center;align-items:center;font-size:13px;color:var(--texto-2);margin-top:10px;text-align:center}
+.secure svg{width:14px;height:14px;flex:none;fill:none;stroke:currentColor;stroke-width:2.2}
+.price .secure{color:#AEB3C8}
 .guarantee{display:grid;grid-template-columns:76px 1fr;gap:14px;align-items:center}
 .seal{width:76px;height:76px;border-radius:50%;background:var(--miel);display:grid;place-items:center;text-align:center;font:800 12px/1.05 var(--display);color:var(--noche);box-shadow:inset 0 0 0 4px #fff,0 0 0 2px var(--miel)}
 .seal b{display:block;font-size:26px}
