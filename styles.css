@@ -222,6 +222,15 @@ input[type=range]{width:100%;accent-color:var(--agave);height:36px}
 .price .now{font:800 64px/1 var(--display);letter-spacing:-.03em;margin:6px 0;color:#fff}
 .price .now small{font:700 20px var(--body);color:#C9CCDA;margin-left:4px}
 .price .why{font-size:14.5px;color:#C9CCDA;margin:0 0 16px}
+.price .franco{margin:6px 0 0;font-size:16px;line-height:1.4;color:#E4E1DA}
+.price .franco s{color:#fff;font-weight:700}
+.price .gline{display:flex;gap:8px;align-items:flex-start;text-align:left;margin:4px auto 12px;max-width:420px;padding:10px 12px;border-radius:var(--radius-m);background:rgba(255,255,255,.08);font-size:14.5px;line-height:1.4;color:#F5F1EA}
+.price .gline svg{flex:none;width:20px;height:20px;fill:none;stroke:#E8C77B;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-top:1px}
+/* Promesa de Franco (L 2.3): nombre del plan + resultado + plazo + sin lo que no quieren */
+.promise{margin:14px 0 0;padding:16px 18px;border-radius:var(--radius-l);background:#fff;border:2px solid var(--agave);box-shadow:0 10px 24px -18px rgba(30,122,76,.7)}
+.promise-k{display:inline-block;font:700 12px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--agave);margin-bottom:4px}
+.promise p{margin:0;font:600 18px/1.4 var(--body);color:var(--noche)}
+.promise p b{font-family:var(--display);font-weight:800}
 .price .cta{background:var(--miel);color:var(--noche);box-shadow:none}
 .price .cta:hover{background:#FFC75E}
 .price .secure{display:flex;gap:8px;justify-content:center;align-items:center;font-size:13px;color:#AEB3C8;margin-top:12px}

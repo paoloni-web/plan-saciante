@@ -93,6 +93,7 @@
     leaf: '<path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15"/><path d="M5 19l8-8"/>',
     glass: '<path d="M6 3h12l-1.6 18H7.6z"/><path d="M6.5 9h11"/>',
     alert: '<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/>',
+    shield: '<path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
     lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
     question: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 0 1 5 .5c0 1.5-2.5 2-2.5 3.5M12 17h.01"/>',
     sparkle: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>'
@@ -458,6 +459,9 @@
   }
 
   // Página de venta: copy de OFERTA-V2 4.1, en el orden de Franco (L 4.2).
+  // Oferta según Franco (L 2.3): nombre del plan + promesa, "Incluye:" con valor, valor total vs. precio de hoy, garantía atada al plazo y precio introductorio.
+  var PROMISE = "deshincha la panza y vuelve a ponerte tu ropa en 21 días, con un vaso de 3 ingredientes en la mañana, sin dietas de hambre, sin gimnasio y sin pastillas.";
+  var GUARANTEE = "Si en 21 días no ves resultados, te devolvemos cada centavo que pagaste, sin hacer ningún tipo de pregunta.";
   function offer() {
     track("ViewContent", { content_name: PR, value: C.PRICE, currency: C.CURRENCY }, true);
     var price = C.PRICE, anchor = C.ANCHOR, mxn = C.PRICE_MXN_NOTE ? C.PRICE_MXN_NOTE + " · " : "";
@@ -467,7 +471,9 @@
       '<div class="banner" role="timer">Tu medida queda guardada · Esta oferta termina en <b id="tm">' + C.TIMER_MINUTES + ":00</b></div>" +
       "<h2>" + N() + ", tu plan del " + esc(BRs) + " personalizado está listo</h2>" +
       appMock() +
-      '<p class="sub center" style="margin-top:-4px">Tu medida, tu hora y tus 21 días, en una app en tu celular.</p>' +
+      // Franco L 2.3: promesa = resultado deseado + en cuánto tiempo + sin lo que no quieren hacer, con números, plazo y método con nombre.
+      '<div class="promise"><span class="promise-k">Lo que vas a lograr</span><p><b>' + esc(BR) + ':</b> ' + PROMISE + "</p></div>" +
+      '<p class="sub center" style="margin-top:10px">Tu medida, tu hora y tus 21 días, en una app en tu celular.</p>' +
       todayVsAfter() +
       '<div class="card medida-line" style="margin:14px 0">' + medidaLine() + "</div>" +
       cta + under +
@@ -475,7 +481,7 @@
       '<div class="phase"><div class="d">Días<b>1-7</b></div><div><b>Deshinchar</b><p>Tu Vaso Blanco cada mañana + aguas frescas. Notas la panza más ligera.</p></div></div>' +
       '<div class="phase"><div class="d">Días<b>8-14</b></div><div><b>Ajustar</b><p>Desayuno, comida y cena de diario. Dejas de picar.</p></div></div>' +
       '<div class="phase"><div class="d">Días<b>15-21</b></div><div><b>Sostener</b><p>Ya es tu hábito, y la ropa se siente más cómoda.</p></div></div></div></section>' +
-      "<section><h2>Esto es lo que recibes hoy</h2><ul class=\"stack\">" +
+      "<section><h2>" + esc(BR) + ' incluye:</h2><ul class="stack">' +
       stackItem("", "Tu receta del Vaso Blanco con TU medida", "Calculada con tus respuestas, y con 6 sabores para no aburrirte", 47) +
       stackItem("", "Tu plan de 21 días, día por día", "Desayuno, comida y cena con comida de diario: frijolitos, tortillas, nada raro", 37) +
       stackItem("", "El recetario «sin lo que no como»", "Escondes lo que no te cae bien y la app te enseña solo lo que sí", 19) +
@@ -485,18 +491,22 @@
       stackItem("b", "Bono 2 · Antojos Bajo Control", "7 días para las noches difíciles", 17) +
       stackItem("b", "Bono 3 · 20 Aguas Frescas sin azúcar", "Para dejar el refresco sin sufrir", 19) +
       "</ul>" +
-      '<div class="price"><div class="today">Oferta válida solo por hoy</div><div class="was">Todo por separado: <s>$' + anchor + " USD</s></div>" +
+      '<div class="price"><div class="today">Oferta válida solo por hoy</div>' +
+      // Franco L 2.3: "Todo por un valor total de X que solo por hoy vas a encontrar por Y" + garantía + precio introductorio.
+      '<p class="franco">Todo por un valor total de <s>$' + anchor + " USD</s> que solo por hoy vas a encontrar por</p>" +
       '<div class="now">$' + price + "<small>USD</small></div>" +
       '<p class="why" style="margin-top:2px"><i>(' + mxn + "pago único, no es suscripción)</i></p>" +
-      '<p class="why">Precio de lanzamiento. Después sube a $' + C.PRICE_AFTER + " USD y los 3 bonos se retiran.</p>" +
+      '<p class="gline">' + ico("shield") + "<span>" + GUARANTEE + "</span></p>" +
+      '<p class="why"><b>Precio introductorio por tiempo limitado.</b> Después sube a $' + C.PRICE_AFTER + " USD y los 3 bonos se retiran.</p>" +
       cta + under + "</div></section>" +
       offerReviews() +
-      '<section class="card guarantee"><div class="seal"><span><b>La</b>apuesta</span></div><div><b>Te propongo una apuesta</b><p style="margin:4px 0 0;color:var(--texto-2);font-size:15.5px">Haz tu Vaso Blanco 7 mañanas. Si no notas la panza más desinflamada, me escribes un correo y te regreso tus ' + price + " dólares. Sin preguntas. <b>Y te quedas con la app.</b> <i>(Tienes 30 días para pedirlo.)</i></p></div></section>" +
+      '<section class="card guarantee"><div class="seal"><span><b>21</b>días</span></div><div><b>Garantía de 21 días: la apuesta del ' + esc(BRs) + '</b><p style="margin:4px 0 0;color:var(--texto-2);font-size:15.5px">Haz tu ' + esc(BRs) + " cada mañana. " + GUARANTEE + " Basta con un correo. <b>Y te quedas con la app.</b></p></div></section>" +
       "<section><h2>Preguntas frecuentes</h2>" +
       faq("¿Es una pastilla o un polvo?", "No. Es una receta casera con 3 cosas del súper y un plan de comidas. No vendemos nada para tomar.") +
       faq("¿Cuánto cuesta el vaso?", "Unos 10 pesos (medio dólar). Menos que un café.") +
       faq("¿Voy a pasar hambre?", "No. Comes 3 veces al día y el vaso te llena hasta la comida.") +
       faq("¿Cómo lo recibo?", "Pagas y en 1 minuto entras a la app con tu correo. Funciona en cualquier celular, sin descargar nada de la tienda.") +
+      faq("¿Y si no me funciona?", GUARANTEE + " Respondes al correo de tu compra y listo.") +
       faq("¿Se cobra cada mes?", "No. Es un solo pago de " + price + " dólares.") +
       faq("¿Sirve si tengo más de 50?", "Sí, está pensado para mujeres de 35 a 60. Si tomas medicamentos o tienes diabetes, pregúntale antes a tu doctor.") +
       "</section>" +
