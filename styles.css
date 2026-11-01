@@ -42,7 +42,9 @@ body.dark .glass{color:#C9CCDA}
 /* Layout */
 main{max-width:520px;margin:0 auto;padding:20px 20px 240px;outline:none} /* 240: que el botón fijo (dock) no tape el último párrafo */
 .screen{animation:in .35s ease both}
-@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* Solo opacidad: un transform (aunque sea "none" al final) convierte .screen en el contenedor de los position:fixed
+   y el botón .dock se quedaba pegado al final del contenido, encima del campo del nombre, en vez de abajo de la pantalla. */
+@keyframes in{from{opacity:0}to{opacity:1}}
 h1,h2{font-family:var(--display);letter-spacing:-.02em;margin:0}
 h1{font-size:clamp(30px,8.4vw,40px);line-height:1.04;font-weight:800}
 h2{font-size:clamp(25px,6.6vw,31px);line-height:1.12;font-weight:800;margin-bottom:8px}
@@ -74,7 +76,7 @@ body.dark .sub{color:#C9CCDA}
 .cta:hover{background:var(--agave-2)}
 .cta:active{transform:scale(.985)}
 .cta[disabled]{background:#9DB8A8;box-shadow:none;cursor:not-allowed}
-.dock{position:fixed;left:0;right:0;bottom:0;padding:12px 20px max(14px,env(safe-area-inset-bottom));background:linear-gradient(to top,var(--leche) 70%,rgba(255,252,247,0));z-index:5}
+.dock{position:fixed;left:0;right:0;bottom:var(--kb,0px);padding:12px 20px max(14px,env(safe-area-inset-bottom));background:linear-gradient(to top,var(--leche) 70%,rgba(255,252,247,0));z-index:5}
 body.dark .dock{background:linear-gradient(to top,var(--noche) 70%,rgba(28,37,65,0))}
 .dock .cta{max-width:480px;margin:0 auto}
 .cta.ghost{background:transparent;color:var(--texto-2);box-shadow:none;text-decoration:underline;font-weight:600;font-size:16px;min-height:48px}

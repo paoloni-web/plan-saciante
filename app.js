@@ -106,9 +106,13 @@
   var S = load() || { i: 0, a: {}, unit: "kg", hunit: "cm", w: 78, h: 160, g: 70 };
   function save() { try { sessionStorage.setItem("sac_state", JSON.stringify(S)); } catch (e) {} }
   function load() { try { return JSON.parse(sessionStorage.getItem("sac_state")); } catch (e) { return null; } }
-  function name() { return (S.a.name || "").trim() || "amiga"; }
+  // Solo el primer nombre y con mayúscula inicial: "  maría ángeles pérez" → "María"; "JOSÉ" → "José"; vacío → "Amiga".
+  function name() {
+    var w = String(S.a.name || "").replace(/[<>]/g, "").trim().split(/\s+/)[0].slice(0, 20);
+    return w ? w.toLowerCase().replace(/(^|[-'’])(\S)/g, function (m, a, b) { return a + b.toUpperCase(); }) : "Amiga";
+  }
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
-  function N() { return esc(name()); }
+  function N(mid) { var n = name(); return esc(mid && n === "Amiga" ? "amiga" : n); } // mid: a media frase
   function kg(v) { return S.unit === "kg" ? v : Math.round(v * 0.4536); }
   function fmtW(v) { return v + " " + S.unit; }
   function label(qid, val) {
@@ -336,7 +340,7 @@
   function nameScreen(s) {
     return "<h2>" + s.title + '</h2><p class="sub">' + s.sub + "</p>" +
       '<form class="field" id="nf" novalidate><label for="nm">Tu nombre</label>' +
-      '<input id="nm" name="given-name" autocomplete="given-name" maxlength="24" placeholder="Ej.: Lupita" value="' + esc(S.a.name || "") + '" required></form>' +
+      '<input id="nm" name="given-name" type="text" autocomplete="given-name" autocapitalize="words" autocorrect="off" spellcheck="false" enterkeyhint="go" maxlength="24" placeholder="Ej.: Lupita" value="' + esc(S.a.name || "") + '" required></form>' +
       dock("Continuar", !(S.a.name || "").trim());
   }
 
@@ -407,7 +411,7 @@
       : ["Calculando tu peso para tu estatura", "Revisando a qué hora te pega el hambre", "Analizando sueño e hidratación", "Detectando tus señales principales"];
     return '<div class="loader" aria-live="polite">' +
       '<svg class="bigcup" viewBox="0 0 40 52" aria-hidden="true"><defs>' + CHIA_PATTERN + '<clipPath id="bc"><path d="M5 4h30l-4 44H9z"/></clipPath></defs><g clip-path="url(#bc)"><rect width="40" height="52" fill="#2B3763"/><rect id="bigmilk" y="52" width="40" height="52" fill="url(#chia)"/></g><path d="M5 4h30l-4 44H9z" fill="none" stroke="#F5F1EA" stroke-width="2" stroke-linejoin="round"/></svg>' +
-      "<h2>" + (plan ? "Estamos creando tu plan personalizado, " + N() + "…" : "Analizando tus respuestas, " + N() + "…") + "</h2>" +
+      "<h2>" + (plan ? "Estamos creando tu plan personalizado, " + N(1) + "…" : "Analizando tus respuestas, " + N(1) + "…") + "</h2>" +
       '<p class="sub" id="lp" style="margin:0;font:800 28px var(--display);color:#FFFFFF">0%</p>' +
       '<ul class="checks">' + items.map(function (x) { return '<li><span class="dot"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg></span>' + x + "</li>"; }).join("") + "</ul>" +
       '<div class="ticker" id="tk"></div></div>';
@@ -599,7 +603,9 @@
     }
     if (s.type === "name") {
       var inp = document.getElementById("nm"), nb = $main.querySelector("[data-next]");
-      inp.addEventListener("input", function () { S.a.name = inp.value.replace(/[<>]/g, ""); save(); nb.disabled = !inp.value.trim(); });
+      var sync = function () { S.a.name = inp.value.replace(/[<>]/g, ""); save(); nb.disabled = !inp.value.trim(); };
+      inp.addEventListener("input", sync); inp.addEventListener("change", sync); // "change": autocompletar de iOS
+      nb.addEventListener("click", sync, true);
       document.getElementById("nf").addEventListener("submit", function (e) { e.preventDefault(); if (inp.value.trim()) next(); });
       setTimeout(function () { inp.focus(); }, 50);
     }
@@ -713,6 +719,16 @@
         beacon(LAST_QUIZ, "offer", "checkout_click");
       });
     });
+  }
+
+  // iPhone: el teclado tapa los position:fixed; mientras se escribe, sube el botón (.dock) por encima del teclado.
+  if (window.visualViewport) {
+    var vv = window.visualViewport, kb = function () {
+      var a = document.activeElement, typing = a && a.tagName === "INPUT" && a.type !== "range";
+      document.documentElement.style.setProperty("--kb", (typing ? Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop)) : 0) + "px");
+    };
+    vv.addEventListener("resize", kb); vv.addEventListener("scroll", kb);
+    document.addEventListener("focusin", kb); document.addEventListener("focusout", function () { setTimeout(kb, 60); });
   }
 
   /* ---------- Arranque ---------- */
